@@ -32,10 +32,13 @@ class HomeScreenController extends ChangeNotifier {
 
     // Query Albums
     albums = await _audioQuery.queryAlbums();
+    isLoading = false;
     notifyListeners();
   }
 
   checkAndRequestPermissions({bool retry = false}) async {
+    isLoading = true;
+    notifyListeners();
     // The param 'retryRequest' is false, by default.
     _hasPermission = await _audioQuery.checkAndRequest(
       retryRequest: retry,

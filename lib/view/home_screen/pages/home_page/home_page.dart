@@ -10,7 +10,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // var provider = context.read<HomeScreenController>();
     return Consumer<HomeScreenController>(
       builder: (context, value, child) {
         if (value.isLoading) {
@@ -25,6 +24,11 @@ class HomePage extends StatelessWidget {
         return ListView.builder(
           itemBuilder: (context, index) => SongListItem(
             song: value.songs[index],
+            onTap: () {
+              context
+                  .read<AudioPlayerController>()
+                  .onAudioTouch(index, value.songs);
+            },
           ),
           itemCount: value.songs.length,
         );
@@ -37,15 +41,15 @@ class SongListItem extends StatelessWidget {
   const SongListItem({
     super.key,
     required this.song,
+    this.onTap,
   });
 
   final SongModel song;
+  final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () {
-        context.read<AudioPlayerController>().onAudioTouch(song);
-      },
+      onTap: onTap,
       leading: QueryArtworkWidget(
         id: song.id,
         type: ArtworkType.AUDIO,
