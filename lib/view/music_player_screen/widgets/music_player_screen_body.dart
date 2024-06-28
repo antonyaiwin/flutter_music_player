@@ -2,9 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_music_player/controller/audio_player_controller.dart';
+import 'package:flutter_music_player/core/constants/color_constants.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:text_marquee/text_marquee.dart';
 
 import '../../../core/constants/image_constants.dart';
@@ -82,13 +85,24 @@ class _MusicPlayerScreenBodyState extends State<MusicPlayerScreenBody>
                     {
                       return Column(
                         children: [
-                          LinearProgressIndicator(
-                            value: snapshot.hasData &&
-                                    snapshot.data != null &&
-                                    value.duration != null
-                                ? getProgress(snapshot.data!.inSeconds,
-                                    value.duration!.inSeconds)
+                          SfSlider(
+                            max: value.duration?.inSeconds ?? 0,
+                            value: snapshot.hasData && snapshot.data != null
+                                ? snapshot.data!.inSeconds
                                 : 0,
+                            stepSize: 1,
+                            onChangeStart: (_) {
+                              value.onSlideStart();
+                            },
+                            onChanged: (duration) {
+                              log('$duration');
+                              value.onSlideChanged(
+                                Duration(seconds: duration ~/ 1),
+                              );
+                            },
+                            onChangeEnd: (_) {
+                              value.onSlideEnd();
+                            },
                           ),
                           const SizedBox(height: 5),
                           Row(
@@ -108,10 +122,15 @@ class _MusicPlayerScreenBodyState extends State<MusicPlayerScreenBody>
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Iconsax.repeate_one_outline,
+                      onPressed: () {
+                        value.toggleLoopMode();
+                      },
+                      icon: Icon(
+                        getLoopIcon(value.loopMode),
                       ),
+                      color: value.loopMode == LoopMode.off
+                          ? null
+                          : ColorConstants.blue,
                     ),
                     IconButton(
                       onPressed: value.previousIndex == null
@@ -140,10 +159,14 @@ class _MusicPlayerScreenBodyState extends State<MusicPlayerScreenBody>
                       icon: const Icon(Iconsax.next_bold),
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        value.toggleShuffleMode();
+                      },
                       icon: const Icon(
                         Iconsax.shuffle_outline,
                       ),
+                      color:
+                          value.shuffleModeEnabled ? ColorConstants.blue : null,
                     ),
                   ],
                 )
@@ -173,5 +196,16 @@ class _MusicPlayerScreenBodyState extends State<MusicPlayerScreenBody>
 
   String twoDigit(int n) {
     return n.toString().padLeft(2, '0');
+  }
+
+  IconData? getLoopIcon(LoopMode loopMode) {
+    switch (loopMode) {
+      case LoopMode.one:
+        return Iconsax.repeate_one_outline;
+      case LoopMode.all:
+        return Iconsax.repeate_music_bold;
+      default:
+        return Iconsax.repeate_music_outline;
+    }
   }
 }

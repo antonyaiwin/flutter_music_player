@@ -6,6 +6,7 @@ class AudioPlayerController extends ChangeNotifier {
   int? currentSongindex;
   List<SongModel> currentPlaylist = [];
   final AudioPlayer _player = AudioPlayer();
+  bool wasPlaying = false;
 
   AudioPlayerController();
 
@@ -70,6 +71,48 @@ class AudioPlayerController extends ChangeNotifier {
 
   refreshSongDetails() {
     currentSongindex = currentIndex;
+    notifyListeners();
+  }
+
+  void onSlideStart() {
+    if (_player.playing) {
+      wasPlaying = true;
+      _player.pause();
+    } else {
+      wasPlaying = false;
+    }
+  }
+
+  void onSlideChanged(Duration value) {
+    _player.seek(value);
+  }
+
+  void onSlideEnd() {
+    if (wasPlaying) {
+      _player.play();
+    }
+  }
+
+  LoopMode get loopMode => _player.loopMode;
+  bool get shuffleModeEnabled => _player.shuffleModeEnabled;
+
+  Future<void> toggleLoopMode() async {
+    if (loopMode == LoopMode.off) {
+      await _player.setLoopMode(LoopMode.one);
+    } else if (loopMode == LoopMode.one) {
+      await _player.setLoopMode(LoopMode.all);
+    } else {
+      await _player.setLoopMode(LoopMode.off);
+    }
+    notifyListeners();
+  }
+
+  void toggleShuffleMode() {
+    if (_player.shuffleModeEnabled) {
+      _player.setShuffleModeEnabled(false);
+    } else {
+      _player.setShuffleModeEnabled(true);
+    }
     notifyListeners();
   }
 }
