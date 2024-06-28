@@ -66,7 +66,7 @@ class _MusicPlayerWidgetState extends State<MusicPlayerWidget>
           return Container(
             height: kToolbarHeight,
             decoration: const BoxDecoration(
-              color: ColorConstants.categorySliderBackground,
+              color: ColorConstants.black3c,
             ),
             child: Row(
               children: [
@@ -114,12 +114,13 @@ class _MusicPlayerWidgetState extends State<MusicPlayerWidget>
                     ],
                   ),
                 ),
-                IconButton(
-                  onPressed:value.previousIndex==null?null: () {
-                    value.previousAudio();
-                  },
-                  icon: const Icon(Iconsax.previous_bold),
-                ),
+                if (value.previousIndex != null)
+                  IconButton(
+                    onPressed: () {
+                      value.previousAudio();
+                    },
+                    icon: const Icon(Iconsax.previous_bold),
+                  ),
                 IconButton(
                   onPressed: () {
                     value.togglePlayPause();
@@ -129,12 +130,13 @@ class _MusicPlayerWidgetState extends State<MusicPlayerWidget>
                     progress: animationController,
                   ),
                 ),
-                IconButton(
-                  onPressed: value.nextIndex == null?null:() {
-                    value.nextAudio();
-                  },
-                  icon: const Icon(Iconsax.next_bold),
-                ),
+                if (value.nextIndex != null)
+                  IconButton(
+                    onPressed: () {
+                      value.nextAudio();
+                    },
+                    icon: const Icon(Iconsax.next_bold),
+                  ),
               ],
             ),
           );

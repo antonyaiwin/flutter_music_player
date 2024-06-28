@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_music_player/controller/audio_player_controller.dart';
 import 'package:flutter_music_player/controller/home_screen_controller.dart';
+import 'package:flutter_music_player/controller/songs_controller.dart';
+import 'package:flutter_music_player/core/constants/color_constants.dart';
 import 'package:flutter_music_player/view/home_screen/home_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -22,11 +24,21 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => AudioPlayerController(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => SongsController(),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.deepPurple,
+            brightness: Brightness.dark,
+          ),
+          appBarTheme: const AppBarTheme(
+            foregroundColor: ColorConstants.primaryWhite,
+          ),
           useMaterial3: true,
         ),
         home: const HomeScreen(),

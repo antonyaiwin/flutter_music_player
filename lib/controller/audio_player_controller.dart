@@ -35,10 +35,11 @@ class AudioPlayerController extends ChangeNotifier {
   }
 
   bool get isPlaying => _player.playing;
-
   int? get previousIndex => _player.previousIndex;
   int? get currentIndex => _player.currentIndex;
   int? get nextIndex => _player.nextIndex;
+  Duration? get duration => _player.duration;
+  Stream<Duration> get positionStream => _player.positionStream;
   SongModel? get currentSong {
     if (currentSongindex != null &&
         currentSongindex! < currentPlaylist.length) {
