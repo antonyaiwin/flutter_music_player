@@ -68,7 +68,7 @@ class _MusicPlayerScreenBodyState extends State<MusicPlayerScreenBody>
                 ),
                 const SizedBox(height: 20),
                 TextMarquee(
-                  value.currentSong!.displayName,
+                  value.currentSong!.title,
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -86,11 +86,15 @@ class _MusicPlayerScreenBodyState extends State<MusicPlayerScreenBody>
                       return Column(
                         children: [
                           SfSlider(
-                            max: value.duration?.inSeconds ?? 0,
+                            max: value.duration?.inSeconds ?? 1,
                             value: snapshot.hasData && snapshot.data != null
                                 ? snapshot.data!.inSeconds
                                 : 0,
-                            stepSize: 1,
+                            // stepSize: 1,
+                            activeColor: ColorConstants.primaryWhite,
+                            inactiveColor:
+                                ColorConstants.primaryWhite.withOpacity(0.35),
+
                             onChangeStart: (_) {
                               value.onSlideStart();
                             },
@@ -140,14 +144,20 @@ class _MusicPlayerScreenBodyState extends State<MusicPlayerScreenBody>
                             },
                       icon: const Icon(Iconsax.previous_bold),
                     ),
-                    IconButton(
+                    IconButton.filled(
                       onPressed: () {
                         value.togglePlayPause();
                       },
                       icon: AnimatedIcon(
                         icon: AnimatedIcons.play_pause,
                         progress: animationController,
-                        size: 35,
+                        size: 55,
+                        color: ColorConstants.primaryWhite,
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(
+                          ColorConstants.primaryBlack.withOpacity(0.2),
+                        ),
                       ),
                     ),
                     IconButton(

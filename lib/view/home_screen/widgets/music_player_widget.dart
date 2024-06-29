@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_music_player/controller/audio_player_controller.dart';
+import 'package:flutter_music_player/controller/songs_controller.dart';
 import 'package:flutter_music_player/core/constants/color_constants.dart';
 import 'package:flutter_music_player/core/constants/image_constants.dart';
 import 'package:flutter_music_player/view/music_player_screen/music_player_screen.dart';
@@ -63,82 +64,101 @@ class _MusicPlayerWidgetState extends State<MusicPlayerWidget>
             animationController.reverse();
             rotationAnimationController.stop();
           }
-          return Container(
-            height: kToolbarHeight,
-            decoration: const BoxDecoration(
-              color: ColorConstants.black3c,
-            ),
-            child: Row(
-              children: [
-                const SizedBox(width: 10),
-                RotationTransition(
-                  turns: rotationAnimationController,
-                  child: CircleAvatar(
-                    radius: 25,
-                    backgroundImage:
-                        const AssetImage(ImageConstants.recordDisc),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: ClipOval(
-                        child: QueryArtworkWidget(
-                          id: value.currentSong!.id,
-                          type: ArtworkType.AUDIO,
-                          nullArtworkWidget: Image.asset(
-                            ImageConstants.musicBg,
-                            width: 50,
-                            height: 50,
-                            fit: BoxFit.cover,
+          return Stack(
+            children: [
+              FutureBuilder(
+                  future:
+                      getColorFromAudioImage(context, value.currentSong!.id),
+                  builder: (context, snapshot) {
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 700),
+                      width: double.infinity,
+                      height: kToolbarHeight,
+                      decoration: BoxDecoration(
+                        color: snapshot.hasData
+                            ? snapshot.data
+                            : ColorConstants.black3c,
+                      ),
+                    );
+                  }),
+              SizedBox(
+                height: kToolbarHeight,
+                child: Row(
+                  children: [
+                    const SizedBox(width: 10),
+                    RotationTransition(
+                      turns: rotationAnimationController,
+                      child: CircleAvatar(
+                        radius: 25,
+                        backgroundImage:
+                            const AssetImage(ImageConstants.recordDisc),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: ClipOval(
+                            child: QueryArtworkWidget(
+                              id: value.currentSong!.id,
+                              type: ArtworkType.AUDIO,
+                              nullArtworkWidget: Image.asset(
+                                ImageConstants.musicBg,
+                                width: 50,
+                                height: 50,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextMarquee(
-                        value.currentSong!.displayName,
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              fontWeight: FontWeight.bold,
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextMarquee(
+                            value.currentSong!.displayName,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                          if (value.currentSong!.artist != null)
+                            TextMarquee(
+                              value.currentSong!.artist!,
+                              style: Theme.of(context).textTheme.bodySmall!,
                             ),
+                        ],
                       ),
-                      if (value.currentSong!.artist != null)
-                        TextMarquee(
-                          value.currentSong!.artist!,
-                          style: Theme.of(context).textTheme.bodySmall!,
-                        ),
-                    ],
-                  ),
+                    ),
+                    if (value.previousIndex != null)
+                      IconButton(
+                        onPressed: () {
+                          value.previousAudio();
+                        },
+                        icon: const Icon(Iconsax.previous_bold),
+                      ),
+                    IconButton(
+                      onPressed: () {
+                        value.togglePlayPause();
+                      },
+                      icon: AnimatedIcon(
+                        icon: AnimatedIcons.play_pause,
+                        progress: animationController,
+                      ),
+                    ),
+                    if (value.nextIndex != null)
+                      IconButton(
+                        onPressed: () {
+                          value.nextAudio();
+                        },
+                        icon: const Icon(Iconsax.next_bold),
+                      ),
+                  ],
                 ),
-                if (value.previousIndex != null)
-                  IconButton(
-                    onPressed: () {
-                      value.previousAudio();
-                    },
-                    icon: const Icon(Iconsax.previous_bold),
-                  ),
-                IconButton(
-                  onPressed: () {
-                    value.togglePlayPause();
-                  },
-                  icon: AnimatedIcon(
-                    icon: AnimatedIcons.play_pause,
-                    progress: animationController,
-                  ),
-                ),
-                if (value.nextIndex != null)
-                  IconButton(
-                    onPressed: () {
-                      value.nextAudio();
-                    },
-                    icon: const Icon(Iconsax.next_bold),
-                  ),
-              ],
-            ),
+              ),
+            ],
           );
         },
       ),
@@ -150,5 +170,20 @@ class _MusicPlayerWidgetState extends State<MusicPlayerWidget>
     animationController.dispose();
     rotationAnimationController.dispose();
     super.dispose();
+  }
+
+  Future<Color> getColorFromAudioImage(BuildContext context, int songId) async {
+    var image = await context.read<SongsController>().getSongImage(songId);
+    Color color;
+    ImageProvider imageProvider;
+    if (image != null) {
+      imageProvider = MemoryImage(image);
+    } else {
+      imageProvider = const AssetImage(ImageConstants.musicBg);
+    }
+    var colorScheme =
+        await ColorScheme.fromImageProvider(provider: imageProvider);
+    color = colorScheme.secondary;
+    return color;
   }
 }
