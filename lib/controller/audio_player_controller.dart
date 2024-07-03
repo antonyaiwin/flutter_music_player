@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -7,8 +9,12 @@ class AudioPlayerController extends ChangeNotifier {
   List<SongModel> currentPlaylist = [];
   final AudioPlayer _player = AudioPlayer();
   bool wasPlaying = false;
+  Uint8List? imageArtwork;
 
-  AudioPlayerController();
+  AudioPlayerController() {
+    // _player.sequenceStream.listen(onData);
+    // _player.audi
+  }
 
   Future<void> onAudioTouch(int index, List<SongModel> songList) async {
     // log(item.data);
@@ -114,5 +120,9 @@ class AudioPlayerController extends ChangeNotifier {
       _player.setShuffleModeEnabled(true);
     }
     notifyListeners();
+  }
+
+  Future<void> fetchArtworkImage() async {
+    imageArtwork = await OnAudioQuery().queryArtwork(0, ArtworkType.AUDIO);
   }
 }

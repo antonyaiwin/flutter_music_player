@@ -1,39 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_music_player/controller/audio_player_controller.dart';
-import 'package:flutter_music_player/controller/home_screen_controller.dart';
-import 'package:flutter_music_player/controller/songs_controller.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_music_player/view/home_screen/pages/home_page/tabs/albums_tab.dart';
+import 'package:flutter_music_player/view/home_screen/pages/home_page/tabs/artists_tab.dart';
+import 'package:flutter_music_player/view/home_screen/pages/home_page/tabs/genres_tab.dart';
 
-import '../../../../global_widgets/song_list_item.dart';
+import 'tabs/songs_tab.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<HomeScreenController, SongsController>(
-      builder: (context, home, songProvider, child) {
-        if (songProvider.isLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (songProvider.songs.isEmpty) {
-          return const Center(
-            child: Text('No music found'),
-          );
-        }
-        return ListView.builder(
-          itemBuilder: (context, index) => SongListItem(
-            song: songProvider.songs[index],
-            onTap: () {
-              context
-                  .read<AudioPlayerController>()
-                  .onAudioTouch(index, songProvider.songs);
-            },
-          ),
-          itemCount: songProvider.songs.length,
-        );
-      },
+    return const SafeArea(
+      child: DefaultTabController(
+        length: 4,
+        child: Column(
+          children: [
+            TabBar(
+              isScrollable: true,
+              tabs: [
+                Tab(
+                  text: 'Songs',
+                ),
+                Tab(
+                  text: 'Artists',
+                ),
+                Tab(
+                  text: 'Albums',
+                ),
+                Tab(
+                  text: 'Genre',
+                ),
+              ],
+            ),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  SongsTab(),
+                  ArtistsTab(),
+                  AlbumsTab(),
+                  GenresTab(),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

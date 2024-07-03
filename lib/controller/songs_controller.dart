@@ -13,17 +13,29 @@ class SongsController extends ChangeNotifier {
   //  Albums List
   List<AlbumModel> albums = [];
 
+  //  Albums List
+  List<ArtistModel> artists = [];
+
+  //  Albums List
+  List<GenreModel> genres = [];
+
   bool isLoading = false;
   bool _hasPermission = false;
 
   Future<void> getAudio() async {
-    // await _audioQuery.scanMedia('/storage/emulated/0/Download/Umbayi/');
+    await _audioQuery.scanMedia('/storage/emulated/0/');
 
     // Query Audios
     songs = await _audioQuery.querySongs();
 
     // Query Albums
     albums = await _audioQuery.queryAlbums();
+
+    // Query Artists
+    artists = await _audioQuery.queryArtists();
+
+    // Query Genre
+    genres = await _audioQuery.queryGenres();
     isLoading = false;
     notifyListeners();
   }
