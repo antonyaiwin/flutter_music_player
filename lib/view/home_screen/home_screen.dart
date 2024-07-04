@@ -10,6 +10,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var provider = context.read<HomeScreenController>();
     return Scaffold(
       body: Column(
         children: [
@@ -23,24 +24,32 @@ class HomeScreen extends StatelessWidget {
           const MusicPlayerWidget(),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Iconsax.home_1_outline),
-            activeIcon: Icon(Iconsax.home_1_bold),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Iconsax.home_1_outline),
-            activeIcon: Icon(Iconsax.home_1_bold),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Iconsax.home_1_outline),
-            activeIcon: Icon(Iconsax.home_1_bold),
-            label: '',
-          ),
-        ],
+      bottomNavigationBar: Consumer<HomeScreenController>(
+        builder: (context, value, child) => BottomNavigationBar(
+          currentIndex: provider.selectedPageIndex,
+          onTap: (value) {
+            provider.changePage(value);
+          },
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Iconsax.home_2_outline),
+              activeIcon: Icon(Iconsax.home_2_bold),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Iconsax.search_normal_1_outline),
+              activeIcon: Icon(Iconsax.search_normal_1_bold),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Iconsax.music_playlist_outline),
+              activeIcon: Icon(Iconsax.music_playlist_bold),
+              label: '',
+            ),
+          ],
+        ),
       ),
     );
   }

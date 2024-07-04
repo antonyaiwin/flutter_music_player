@@ -5,21 +5,26 @@ import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class AudioPlayerController extends ChangeNotifier {
-  int? currentSongindex;
+  // int? currentSongindex;
   List<SongModel> currentPlaylist = [];
   final AudioPlayer _player = AudioPlayer();
   bool wasPlaying = false;
   Uint8List? imageArtwork;
 
   AudioPlayerController() {
-    // _player.sequenceStream.listen(onData);
-    // _player.audi
+    _player.currentIndexStream.listen(
+      (event) {
+        // currentSongindex = event;
+        fetchArtworkImage();
+        notifyListeners();
+      },
+    );
   }
 
   Future<void> onAudioTouch(int index, List<SongModel> songList) async {
     // log(item.data);
     currentPlaylist = songList;
-    currentSongindex = index;
+    // currentSongindex = index;
     // Define the playlist
     final playlist = ConcatenatingAudioSource(
       // Start loading next item just before reaching it
@@ -48,12 +53,23 @@ class AudioPlayerController extends ChangeNotifier {
   Duration? get duration => _player.duration;
   Stream<Duration> get positionStream => _player.positionStream;
   SongModel? get currentSong {
-    if (currentSongindex != null &&
-        currentSongindex! < currentPlaylist.length) {
-      return currentPlaylist[currentSongindex!];
-    } else {
+    if (currentIndex == null) {
       return null;
+    } else {
+      var id = _player.audioSource?.sequence.elementAt(currentIndex!).tag;
+      if (id == null) {
+        return null;
+      } else {
+        return currentPlaylist[currentIndex!];
+      }
     }
+
+    // if (currentSongindex != null &&
+    //     currentSongindex! < currentPlaylist.length) {
+    //   return currentPlaylist[currentSongindex!];
+    // } else {
+    //   return null;
+    // }
   }
 
   void togglePlayPause() {
@@ -67,18 +83,18 @@ class AudioPlayerController extends ChangeNotifier {
 
   Future<void> nextAudio() async {
     await _player.seekToNext();
-    refreshSongDetails();
+    // refreshSongDetails();
   }
 
   Future<void> previousAudio() async {
     await _player.seekToPrevious();
-    refreshSongDetails();
+    // refreshSongDetails();
   }
 
-  refreshSongDetails() {
-    currentSongindex = currentIndex;
-    notifyListeners();
-  }
+  // refreshSongDetails() {
+  //   currentSongindex = currentIndex;
+  //   notifyListeners();
+  // }
 
   void onSlideStart() {
     if (_player.playing) {
@@ -123,6 +139,11 @@ class AudioPlayerController extends ChangeNotifier {
   }
 
   Future<void> fetchArtworkImage() async {
-    imageArtwork = await OnAudioQuery().queryArtwork(0, ArtworkType.AUDIO);
+    imageArtwork = await OnAudioQuery().queryArtwork(
+      currentSong?.id ?? -1,
+      ArtworkType.AUDIO,
+      size: 1000,
+    );
+    notifyListeners();
   }
 }

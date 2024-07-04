@@ -7,7 +7,6 @@ import 'package:flutter_music_player/core/constants/color_constants.dart';
 import 'package:flutter_music_player/core/constants/image_constants.dart';
 import 'package:flutter_music_player/view/music_player_screen/music_player_screen.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 import 'package:text_marquee/text_marquee.dart';
 
@@ -53,7 +52,7 @@ class _MusicPlayerWidgetState extends State<MusicPlayerWidget>
       child: Consumer<AudioPlayerController>(
         builder:
             (BuildContext context, AudioPlayerController value, Widget? child) {
-          if (provider.currentSongindex == null) {
+          if (provider.currentIndex == null) {
             return const SizedBox();
           }
           log('isplaying ${value.isPlaying}');
@@ -95,16 +94,19 @@ class _MusicPlayerWidgetState extends State<MusicPlayerWidget>
                         child: Padding(
                           padding: const EdgeInsets.all(8),
                           child: ClipOval(
-                            child: QueryArtworkWidget(
-                              id: value.currentSong!.id,
-                              type: ArtworkType.AUDIO,
-                              nullArtworkWidget: Image.asset(
-                                ImageConstants.musicBg,
-                                width: 50,
-                                height: 50,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                            child: value.imageArtwork == null
+                                ? Image.asset(
+                                    ImageConstants.musicBg,
+                                    fit: BoxFit.cover,
+                                    height: 50,
+                                    width: 50,
+                                  )
+                                : Image.memory(
+                                    value.imageArtwork!,
+                                    fit: BoxFit.cover,
+                                    height: 50,
+                                    width: 50,
+                                  ),
                           ),
                         ),
                       ),

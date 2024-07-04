@@ -16,14 +16,18 @@ class SongListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
-      leading: QueryArtworkWidget(
-        id: song.id,
-        type: ArtworkType.AUDIO,
-        nullArtworkWidget: Image.asset(
-          ImageConstants.musicBg,
-          width: 50,
-          height: 50,
-          fit: BoxFit.cover,
+      leading: ClipRRect(
+        borderRadius: BorderRadius.circular(5),
+        child: QueryArtworkWidget(
+          id: song.id,
+          type: ArtworkType.AUDIO,
+          artworkBorder: BorderRadius.zero,
+          nullArtworkWidget: Image.asset(
+            ImageConstants.musicBg,
+            width: 50,
+            height: 50,
+            fit: BoxFit.cover,
+          ),
         ),
       ),
       title: Text(song.title),

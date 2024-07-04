@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_music_player/controller/songs_controller.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
 
 import '../core/constants/image_constants.dart';
 
@@ -16,17 +18,52 @@ class ArtistListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
-      leading: QueryArtworkWidget(
-        id: artist.id,
-        type: ArtworkType.AUDIO,
-        nullArtworkWidget: Image.asset(
-          ImageConstants.musicBg,
-          width: 50,
-          height: 50,
-          fit: BoxFit.cover,
+      leading: ClipRRect(
+        borderRadius: BorderRadius.circular(5),
+        child: FutureBuilder(
+          future: getFirstSongWithArtistId(artist.id, context),
+          builder: (context, snapshot) {
+            if (snapshot.data == null) {
+              return Image.asset(
+                ImageConstants.musicBg,
+                width: 50,
+                height: 50,
+                fit: BoxFit.cover,
+              );
+            }
+            return QueryArtworkWidget(
+              id: snapshot.data!,
+              type: ArtworkType.AUDIO,
+              artworkBorder: BorderRadius.zero,
+              nullArtworkWidget: Image.asset(
+                ImageConstants.musicBg,
+                width: 50,
+                height: 50,
+                fit: BoxFit.cover,
+              ),
+            );
+          },
         ),
       ),
       title: Text(artist.artist),
     );
+  }
+
+  Future<int?> getFirstSongWithArtistId(int id, BuildContext context) async {
+    var list = context.read<SongsController>().songs.where(
+      (element) {
+        return element.artistId == id;
+      },
+    );
+    if (list.isNotEmpty) {
+      for (var element in list) {
+        var image =
+            await context.read<SongsController>().getSongImage(element.id);
+        if (image != null) {
+          return element.id;
+        }
+      }
+    }
+    return null;
   }
 }

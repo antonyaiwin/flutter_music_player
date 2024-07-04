@@ -5,7 +5,6 @@ import 'package:flutter_music_player/controller/audio_player_controller.dart';
 import 'package:flutter_music_player/core/constants/color_constants.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:text_marquee/text_marquee.dart';
@@ -47,6 +46,7 @@ class _MusicPlayerScreenBodyState extends State<MusicPlayerScreenBody>
             } else {
               animationController.reverse();
             }
+            log('consumer rebuild ${value.imageArtwork == null}');
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -54,16 +54,15 @@ class _MusicPlayerScreenBodyState extends State<MusicPlayerScreenBody>
                   aspectRatio: 1,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: QueryArtworkWidget(
-                      id: value.currentSong!.id,
-                      type: ArtworkType.AUDIO,
-                      nullArtworkWidget: Image.asset(
-                        ImageConstants.musicBg,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                    child: value.imageArtwork == null
+                        ? Image.asset(
+                            ImageConstants.musicBg,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.memory(
+                            value.imageArtwork!,
+                            fit: BoxFit.cover,
+                          ),
                   ),
                 ),
                 const SizedBox(height: 20),
