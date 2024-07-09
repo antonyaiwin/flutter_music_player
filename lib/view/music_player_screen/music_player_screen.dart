@@ -56,9 +56,13 @@ class MusicPlayerScreen extends StatelessWidget {
                   ),
                   duration: const Duration(seconds: 1),
                   child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 30.0, sigmaY: 30.0),
+                    filter: ImageFilter.blur(
+                      sigmaX: 5000,
+                      sigmaY: 5000,
+                      tileMode: TileMode.repeated,
+                    ),
                     child: Container(
-                      color: ColorConstants.primaryBlack.withOpacity(0.5),
+                      color: ColorConstants.primaryBlack.withOpacity(0.3),
                       child: const Center(),
                     ),
                   ),
