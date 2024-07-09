@@ -23,14 +23,37 @@ class ArtistsTab extends StatelessWidget {
           );
         }
         return ListView.builder(
-          itemBuilder: (context, index) => ArtistListItem(
-            artist: songProvider.artists[index],
-            onTap: () {
-              context
-                  .read<AudioPlayerController>()
-                  .onAudioTouch(index, songProvider.songs);
-            },
-          ),
+          itemBuilder: (context, index) {
+            var listItem = ArtistListItem(
+              artist: songProvider.artists[index],
+              onTap: () {
+                context
+                    .read<AudioPlayerController>()
+                    .onAudioTouch(index, songProvider.songs);
+              },
+            );
+
+            if (index != 0) {
+              var artist = songProvider.artists[index];
+              var prevArtist = songProvider.artists[index - 1];
+              if (artist.artist.isNotEmpty &&
+                  prevArtist.artist.isNotEmpty &&
+                  artist.artist[0] != prevArtist.artist[0]) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 20, bottom: 10, top: 20),
+                      child: Text(artist.artist[0]),
+                    ),
+                    listItem,
+                  ],
+                );
+              }
+            }
+            return listItem;
+          },
           itemCount: songProvider.artists.length,
         );
       },
