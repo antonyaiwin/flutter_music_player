@@ -40,7 +40,7 @@ class _MusicPlayerWidgetState extends State<MusicPlayerWidget>
   @override
   Widget build(BuildContext context) {
     var provider = context.read<AudioPlayerController>();
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         Navigator.push(
           context,

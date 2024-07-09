@@ -13,9 +13,9 @@ class AudioPlayerController extends ChangeNotifier {
 
   AudioPlayerController() {
     _player.currentIndexStream.listen(
-      (event) {
+      (event) async {
         // currentSongindex = event;
-        fetchArtworkImage();
+        await fetchArtworkImage();
         notifyListeners();
       },
     );
@@ -43,6 +43,7 @@ class AudioPlayerController extends ChangeNotifier {
       initialIndex: index,
     );
     _player.play();
+    fetchArtworkImage();
     notifyListeners();
   }
 

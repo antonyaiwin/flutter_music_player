@@ -21,7 +21,10 @@ class SearchPage extends StatelessWidget {
                 hintText: 'Search for songs, albumns and artist',
               ),
               onChanged: (value) {
-                provider.onSearchQueryChanged(context: context, query: value);
+                provider.onSearchQueryChanged(
+                  context: context,
+                  query: value,
+                );
               },
             ),
             Expanded(
