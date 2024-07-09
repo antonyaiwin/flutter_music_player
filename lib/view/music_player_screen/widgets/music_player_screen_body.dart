@@ -10,6 +10,7 @@ import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:text_marquee/text_marquee.dart';
 
 import '../../../core/constants/image_constants.dart';
+import '../../../utils/functions/audio_functions.dart';
 
 class MusicPlayerScreenBody extends StatefulWidget {
   const MusicPlayerScreenBody({
@@ -191,26 +192,6 @@ class _MusicPlayerScreenBodyState extends State<MusicPlayerScreenBody>
         ),
       ),
     );
-  }
-
-  double getProgress(int position, int duration) {
-    log('position: $position , duration: $duration');
-
-    return position / duration;
-  }
-
-  String getTimeFromDuration(Duration? duration) {
-    if (duration == null) {
-      return '--:--';
-    } else {
-      String minutes = twoDigit(duration.inMinutes.remainder(60));
-      String seconds = twoDigit(duration.inSeconds.remainder(60));
-      return '$minutes:$seconds';
-    }
-  }
-
-  String twoDigit(int n) {
-    return n.toString().padLeft(2, '0');
   }
 
   IconData? getLoopIcon(LoopMode loopMode) {
