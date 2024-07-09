@@ -3,6 +3,7 @@ import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
 import '../controller/songs_controller.dart';
+import '../core/constants/color_constants.dart';
 import '../core/constants/image_constants.dart';
 
 class AlbumListItem extends StatelessWidget {
@@ -45,7 +46,17 @@ class AlbumListItem extends StatelessWidget {
           },
         ),
       ),
-      title: Text(album.album),
+      title: Text(
+        album.album,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+      subtitle: Text(
+        '${album.numOfSongs} song${album.numOfSongs > 1 ? 's' : ''} • ${album.artist ?? ''}',
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: ColorConstants.hintColor,
+            ),
+      ),
     );
   }
 

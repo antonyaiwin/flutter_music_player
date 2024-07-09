@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_music_player/core/constants/color_constants.dart';
+import 'package:flutter_music_player/utils/functions/audio_functions.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import '../core/constants/image_constants.dart';
@@ -30,7 +32,30 @@ class SongListItem extends StatelessWidget {
           ),
         ),
       ),
-      title: Text(song.title),
+      title: Text(
+        song.title,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+      subtitle: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            song.artist ?? '',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: ColorConstants.hintColor,
+                ),
+          ),
+          Text(
+            song.duration != null
+                ? getTimeFromDuration(Duration(milliseconds: song.duration!))
+                : '',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: ColorConstants.hintColor,
+                ),
+          ),
+        ],
+      ),
     );
   }
 }

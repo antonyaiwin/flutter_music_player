@@ -3,6 +3,7 @@ import 'package:flutter_music_player/controller/songs_controller.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
+import '../core/constants/color_constants.dart';
 import '../core/constants/image_constants.dart';
 
 class ArtistListItem extends StatelessWidget {
@@ -46,6 +47,14 @@ class ArtistListItem extends StatelessWidget {
         ),
       ),
       title: Text(artist.artist),
+      subtitle: Text(
+        artist.numberOfTracks != null
+            ? '${artist.numberOfTracks} song${artist.numberOfTracks! > 1 ? 's' : ''}'
+            : '',
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: ColorConstants.hintColor,
+            ),
+      ),
     );
   }
 
