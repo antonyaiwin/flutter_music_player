@@ -52,17 +52,23 @@ class _MusicPlayerScreenBodyState extends State<MusicPlayerScreenBody>
               children: [
                 AspectRatio(
                   aspectRatio: 1,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: value.imageArtwork == null
-                        ? Image.asset(
-                            ImageConstants.musicBg,
-                            fit: BoxFit.cover,
-                          )
-                        : Image.memory(
-                            value.imageArtwork!,
-                            fit: BoxFit.cover,
-                          ),
+                  child: AnimatedScale(
+                    curve:
+                        value.isPlaying ? Curves.easeOutBack : Curves.easeInOut,
+                    duration: const Duration(milliseconds: 800),
+                    scale: value.isPlaying ? 1 : 0.7,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: value.imageArtwork == null
+                          ? Image.asset(
+                              ImageConstants.musicBg,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.memory(
+                              value.imageArtwork!,
+                              fit: BoxFit.cover,
+                            ),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
