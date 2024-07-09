@@ -63,28 +63,22 @@ class _MusicPlayerWidgetState extends State<MusicPlayerWidget>
             animationController.reverse();
             rotationAnimationController.stop();
           }
-          return Stack(
-            children: [
-              FutureBuilder(
-                  future:
-                      getColorFromAudioImage(context, value.currentSong!.id),
-                  builder: (context, snapshot) {
-                    return AnimatedContainer(
-                      duration: const Duration(milliseconds: 700),
-                      width: double.infinity,
-                      height: kToolbarHeight,
-                      decoration: BoxDecoration(
-                        color: snapshot.hasData
-                            ? snapshot.data
-                            : ColorConstants.black3c,
-                      ),
-                    );
-                  }),
-              SizedBox(
+          return FutureBuilder(
+            future: getColorFromAudioImage(context, value.currentSong!.id),
+            builder: (context, snapshot) {
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 700),
+                width: double.infinity,
                 height: kToolbarHeight,
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color:
+                      snapshot.hasData ? snapshot.data : ColorConstants.black3c,
+                  borderRadius: BorderRadius.circular(15),
+                ),
                 child: Row(
                   children: [
-                    const SizedBox(width: 10),
                     RotationTransition(
                       turns: rotationAnimationController,
                       child: CircleAvatar(
@@ -159,8 +153,8 @@ class _MusicPlayerWidgetState extends State<MusicPlayerWidget>
                       ),
                   ],
                 ),
-              ),
-            ],
+              );
+            },
           );
         },
       ),
