@@ -31,7 +31,7 @@ class AlbumsTab extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ChangeNotifierProvider(
-                    create: (context) => AlbumViewScreenController(
+                    create: (context) => ArtistAlbumViewScreenController(
                       context: context,
                       album: songProvider.albums[index],
                     ),

@@ -11,15 +11,15 @@ class AlbumViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var provider = context.read<AlbumViewScreenController>();
+    var provider = context.read<ArtistAlbumViewScreenController>();
     return Scaffold(
       appBar: AppBar(
-        title: Text(provider.album.album),
+        title: Text(provider.album?.album ?? ''),
       ),
       body: Column(
         children: [
           Expanded(
-            child: Consumer<AlbumViewScreenController>(
+            child: Consumer<ArtistAlbumViewScreenController>(
               builder: (BuildContext context, value, Widget? child) =>
                   ListView.builder(
                 itemBuilder: (context, index) => SongListItem(

@@ -4,26 +4,35 @@ import 'package:flutter_music_player/controller/songs_controller.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
-class AlbumViewScreenController extends ChangeNotifier {
-  final AlbumModel album;
+class ArtistAlbumViewScreenController extends ChangeNotifier {
+  final AlbumModel? album;
+  final ArtistModel? artist;
   BuildContext context;
   List<SongModel> songList = [];
 
-  AlbumViewScreenController({
+  ArtistAlbumViewScreenController({
     required this.context,
-    required this.album,
+    this.album,
+    this.artist,
   }) {
     _loadSongs();
+    assert(
+      album == null || artist == null,
+      'Cannot provide both album and artist\n'
+      'To provide both, use "decoration: BoxDecoration(color: color)".',
+    );
   }
 
   void _loadSongs() {
-    songList = context
-        .read<SongsController>()
-        .songs
-        .where(
-          (element) => element.albumId == album.id,
-        )
-        .toList();
+    songList = context.read<SongsController>().songs.where(
+      (element) {
+        if (artist != null) {
+          return element.artistId == artist?.id;
+        } else {
+          return element.albumId == album?.id;
+        }
+      },
+    ).toList();
     notifyListeners();
   }
 }

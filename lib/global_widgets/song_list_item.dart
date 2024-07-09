@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_music_player/controller/audio_player_controller.dart';
 import 'package:flutter_music_player/core/constants/color_constants.dart';
+import 'package:flutter_music_player/global_widgets/breathing_indicator.dart';
 import 'package:flutter_music_player/utils/functions/audio_functions.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
 
 import '../core/constants/image_constants.dart';
 
@@ -32,10 +35,24 @@ class SongListItem extends StatelessWidget {
           ),
         ),
       ),
-      title: Text(
-        song.title,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
+      title: Consumer<AudioPlayerController>(
+        builder: (context, value, child) => Row(
+          children: [
+            Expanded(
+              child: Text(
+                song.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: value.currentSong?.id == song.id
+                      ? ColorConstants.primaryColor
+                      : null,
+                ),
+              ),
+            ),
+            if (value.currentSong?.id == song.id) const BreathingIndicator(),
+          ],
+        ),
       ),
       subtitle: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

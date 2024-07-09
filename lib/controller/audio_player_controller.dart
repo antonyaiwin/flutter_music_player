@@ -19,6 +19,15 @@ class AudioPlayerController extends ChangeNotifier {
         notifyListeners();
       },
     );
+
+    _player.processingStateStream.listen(
+      (event) async {
+        if (event == ProcessingState.completed) {
+          await _player.pause();
+          _player.seek(Duration.zero, index: 0);
+        }
+      },
+    );
   }
 
   Future<void> onAudioTouch(int index, List<SongModel> songList) async {
