@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_music_player/controller/album_view_screen_controller.dart';
 import 'package:flutter_music_player/global_widgets/album_list_item.dart';
+import 'package:flutter_music_player/view/album_view_screen/album_view_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../controller/audio_player_controller.dart';
 import '../../../../../controller/home_screen_controller.dart';
 import '../../../../../controller/songs_controller.dart';
 
@@ -26,10 +27,18 @@ class AlbumsTab extends StatelessWidget {
           itemBuilder: (context, index) => AlbumListItem(
             album: songProvider.albums[index],
             onTap: () {
-              context.read<AudioPlayerController>().onAudioTouch(
-                    index,
-                    songProvider.songs,
-                  );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ChangeNotifierProvider(
+                    create: (context) => AlbumViewScreenController(
+                      context: context,
+                      album: songProvider.albums[index],
+                    ),
+                    child: const AlbumViewScreen(),
+                  ),
+                ),
+              );
             },
           ),
           itemCount: songProvider.albums.length,
