@@ -93,6 +93,7 @@ class _MusicPlayerScreenBodyState extends State<MusicPlayerScreenBody>
                                         : Image.memory(
                                             value.imageArtwork!,
                                             fit: BoxFit.cover,
+                                            filterQuality: FilterQuality.high,
                                           ),
                                   ),
                                 ),

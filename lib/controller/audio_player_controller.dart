@@ -157,6 +157,8 @@ class AudioPlayerController extends ChangeNotifier {
       currentSong?.id ?? -1,
       ArtworkType.AUDIO,
       size: 1000,
+      quality: 1000,
+      format: ArtworkFormat.PNG,
     );
     notifyListeners();
   }
