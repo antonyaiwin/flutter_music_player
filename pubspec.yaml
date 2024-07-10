@@ -44,6 +44,7 @@ dependencies:
   syncfusion_flutter_sliders: ^26.1.39
   collection: ^1.18.0
   mini_music_visualizer: ^1.1.4
+  carousel_slider: ^4.2.1
 
 dev_dependencies:
   flutter_test:

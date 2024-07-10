@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -7,6 +8,7 @@ import 'package:on_audio_query/on_audio_query.dart';
 class AudioPlayerController extends ChangeNotifier {
   // int? currentSongindex;
   List<SongModel> currentPlaylist = [];
+  CarouselController carouselController = CarouselController();
   final AudioPlayer _player = AudioPlayer();
   bool wasPlaying = false;
   Uint8List? imageArtwork;
@@ -15,7 +17,8 @@ class AudioPlayerController extends ChangeNotifier {
     _player.currentIndexStream.listen(
       (event) async {
         // currentSongindex = event;
-        await fetchArtworkImage();
+        carouselController.animateToPage(event ?? currentIndex ?? 0);
+        imageArtwork = await fetchArtworkImage();
         notifyListeners();
       },
     );
@@ -52,7 +55,9 @@ class AudioPlayerController extends ChangeNotifier {
       initialIndex: index,
     );
     _player.play();
-    fetchArtworkImage();
+
+    notifyListeners();
+    imageArtwork = await fetchArtworkImage();
     notifyListeners();
   }
 
@@ -152,14 +157,13 @@ class AudioPlayerController extends ChangeNotifier {
     _player.seek(Duration.zero, index: index);
   }
 
-  Future<void> fetchArtworkImage() async {
-    imageArtwork = await OnAudioQuery().queryArtwork(
-      currentSong?.id ?? -1,
+  Future<Uint8List?> fetchArtworkImage({int? index}) async {
+    return await OnAudioQuery().queryArtwork(
+      index == null ? (currentSong?.id ?? -1) : currentPlaylist[index].id,
       ArtworkType.AUDIO,
       size: 1000,
       quality: 1000,
       format: ArtworkFormat.PNG,
     );
-    notifyListeners();
   }
 }

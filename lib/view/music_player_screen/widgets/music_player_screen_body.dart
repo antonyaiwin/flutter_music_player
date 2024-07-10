@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_music_player/controller/audio_player_controller.dart';
 import 'package:flutter_music_player/controller/music_player_screen_controller.dart';
@@ -73,29 +74,61 @@ class _MusicPlayerScreenBodyState extends State<MusicPlayerScreenBody>
                               },
                               itemCount: value.currentPlaylist.length,
                             )
-                          : Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: AspectRatio(
-                                aspectRatio: 1,
-                                child: AnimatedScale(
+                          : AspectRatio(
+                              aspectRatio: 1,
+                              child: CarouselSlider.builder(
+                                carouselController: value.carouselController,
+                                itemBuilder: (BuildContext context, int index,
+                                        int realIndex) =>
+                                    AnimatedScale(
                                   curve: value.isPlaying
                                       ? Curves.easeOutBack
                                       : Curves.easeInOut,
                                   duration: const Duration(milliseconds: 800),
-                                  scale: value.isPlaying ? 1 : 0.7,
+                                  scale: value.isPlaying ? 0.9 : 0.6,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(20),
-                                    child: value.imageArtwork == null
-                                        ? Image.asset(
-                                            ImageConstants.musicBg,
-                                            fit: BoxFit.cover,
-                                          )
-                                        : Image.memory(
-                                            value.imageArtwork!,
-                                            fit: BoxFit.cover,
-                                            filterQuality: FilterQuality.high,
+                                    child: FutureBuilder(
+                                      future:
+                                          value.fetchArtworkImage(index: index),
+                                      builder: (context, snapshot) {
+                                        return AnimatedContainer(
+                                          duration:
+                                              const Duration(milliseconds: 800),
+                                          decoration: BoxDecoration(
+                                            image: snapshot.connectionState ==
+                                                    ConnectionState.waiting
+                                                ? null
+                                                : DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    filterQuality:
+                                                        FilterQuality.high,
+                                                    image: snapshot.data == null
+                                                        ? const AssetImage(
+                                                            ImageConstants
+                                                                .musicBg,
+                                                          )
+                                                        : MemoryImage(
+                                                            snapshot.data!,
+                                                          ),
+                                                  ),
                                           ),
+                                        );
+                                      },
+                                    ),
                                   ),
+                                ),
+                                itemCount: value.currentPlaylist.length,
+                                options: CarouselOptions(
+                                  initialPage: value.currentIndex ?? 0,
+                                  aspectRatio: 1,
+                                  viewportFraction: 1,
+                                  onPageChanged: (index, reason) {
+                                    if (reason ==
+                                        CarouselPageChangedReason.manual) {
+                                      value.seekToIndex(index);
+                                    }
+                                  },
                                 ),
                               ),
                             ),
