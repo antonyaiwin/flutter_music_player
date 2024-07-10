@@ -107,19 +107,22 @@ class _MusicPlayerScreenBodyState extends State<MusicPlayerScreenBody>
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextMarquee(
-                            value.currentSong!.title,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                    TextMarquee(
+                      value.currentSong!.title,
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            fontWeight: FontWeight.bold,
                           ),
-                        ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        if (value.currentSong!.artist != null)
+                          Expanded(
+                            child: TextMarquee(
+                              value.currentSong!.artist!,
+                              style: Theme.of(context).textTheme.bodyMedium!,
+                            ),
+                          ),
                         Consumer<MusicPlayerScreenController>(
                           builder: (
                             BuildContext context,
@@ -149,11 +152,6 @@ class _MusicPlayerScreenBodyState extends State<MusicPlayerScreenBody>
                         ),
                       ],
                     ),
-                    if (value.currentSong!.artist != null)
-                      TextMarquee(
-                        value.currentSong!.artist!,
-                        style: Theme.of(context).textTheme.bodyMedium!,
-                      ),
                     const SizedBox(height: 20),
                     StreamBuilder(
                       stream: value.positionStream,

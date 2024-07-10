@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_music_player/controller/audio_player_controller.dart';
 import 'package:flutter_music_player/core/constants/color_constants.dart';
-import 'package:flutter_music_player/global_widgets/breathing_indicator.dart';
 import 'package:flutter_music_player/utils/functions/audio_functions.dart';
+import 'package:mini_music_visualizer/mini_music_visualizer.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
@@ -50,7 +50,16 @@ class SongListItem extends StatelessWidget {
                 ),
               ),
             ),
-            if (value.currentSong?.id == song.id) const BreathingIndicator(),
+            if (value.currentSong?.id == song.id) ...[
+              const SizedBox(width: 5),
+              MiniMusicVisualizer(
+                color: ColorConstants.primaryColor,
+                width: 4,
+                height: 15,
+                radius: 4,
+                animate: value.isPlaying,
+              ),
+            ]
           ],
         ),
       ),

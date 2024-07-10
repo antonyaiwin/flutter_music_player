@@ -2,13 +2,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_music_player/controller/audio_player_controller.dart';
-import 'package:flutter_music_player/controller/songs_controller.dart';
 import 'package:flutter_music_player/core/constants/color_constants.dart';
 import 'package:flutter_music_player/core/constants/image_constants.dart';
 import 'package:flutter_music_player/view/music_player_screen/music_player_screen.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:text_marquee/text_marquee.dart';
+
+import '../../../utils/functions/audio_functions.dart';
 
 class MusicPlayerWidget extends StatefulWidget {
   const MusicPlayerWidget({
@@ -166,20 +167,5 @@ class _MusicPlayerWidgetState extends State<MusicPlayerWidget>
     animationController.dispose();
     rotationAnimationController.dispose();
     super.dispose();
-  }
-
-  Future<Color> getColorFromAudioImage(BuildContext context, int songId) async {
-    var image = await context.read<SongsController>().getSongImage(songId);
-    Color color;
-    ImageProvider imageProvider;
-    if (image != null) {
-      imageProvider = MemoryImage(image);
-    } else {
-      imageProvider = const AssetImage(ImageConstants.musicBg);
-    }
-    var colorScheme =
-        await ColorScheme.fromImageProvider(provider: imageProvider);
-    color = colorScheme.secondary;
-    return color;
   }
 }

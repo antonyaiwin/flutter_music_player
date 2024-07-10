@@ -43,6 +43,7 @@ dependencies:
   text_marquee: ^0.0.2
   syncfusion_flutter_sliders: ^26.1.39
   collection: ^1.18.0
+  mini_music_visualizer: ^1.1.4
 
 dev_dependencies:
   flutter_test:

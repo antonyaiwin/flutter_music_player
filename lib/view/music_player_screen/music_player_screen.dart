@@ -23,6 +23,7 @@ class MusicPlayerScreen extends StatelessWidget {
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
