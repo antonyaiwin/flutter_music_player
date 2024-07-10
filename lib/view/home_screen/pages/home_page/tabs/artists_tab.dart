@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_music_player/global_widgets/artist_list_item.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../controller/audio_player_controller.dart';
+import '../../../../../controller/artist_album_view_screen_controller.dart';
 import '../../../../../controller/home_screen_controller.dart';
 import '../../../../../controller/songs_controller.dart';
+import '../../../../artist_album_view_screen/artist_album_view_screen.dart';
 
 class ArtistsTab extends StatelessWidget {
   const ArtistsTab({super.key});
@@ -27,9 +28,18 @@ class ArtistsTab extends StatelessWidget {
             var listItem = ArtistListItem(
               artist: songProvider.artists[index],
               onTap: () {
-                context
-                    .read<AudioPlayerController>()
-                    .onAudioTouch(index, songProvider.songs);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChangeNotifierProvider(
+                      create: (context) => ArtistAlbumViewScreenController(
+                        context: context,
+                        artist: songProvider.artists[index],
+                      ),
+                      child: const ArtistAlbumViewScreen(),
+                    ),
+                  ),
+                );
               },
             );
 

@@ -18,8 +18,7 @@ class ArtistAlbumViewScreenController extends ChangeNotifier {
     _loadSongs();
     assert(
       album == null || artist == null,
-      'Cannot provide both album and artist\n'
-      'To provide both, use "decoration: BoxDecoration(color: color)".',
+      'Cannot provide both album and artist.',
     );
   }
 

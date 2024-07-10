@@ -148,6 +148,10 @@ class AudioPlayerController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void seekToIndex(int index) {
+    _player.seek(Duration.zero, index: index);
+  }
+
   Future<void> fetchArtworkImage() async {
     imageArtwork = await OnAudioQuery().queryArtwork(
       currentSong?.id ?? -1,

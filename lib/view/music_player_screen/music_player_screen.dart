@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_music_player/controller/audio_player_controller.dart';
+import 'package:flutter_music_player/controller/music_player_screen_controller.dart';
 import 'package:flutter_music_player/controller/songs_controller.dart';
 import 'package:flutter_music_player/core/constants/color_constants.dart';
 import 'package:flutter_music_player/core/constants/image_constants.dart';
@@ -16,62 +17,65 @@ class MusicPlayerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Iconsax.arrow_down_1_outline),
-        ),
-        title: const Text('Now Playing'),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.more_vert),
+    return ChangeNotifierProvider(
+      create: (BuildContext context) => MusicPlayerScreenController(),
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Iconsax.arrow_down_1_outline),
           ),
-        ],
-      ),
-      body: Stack(
-        children: [
-          Consumer<AudioPlayerController>(
-            builder: (BuildContext context, AudioPlayerController value,
-                    Widget? child) =>
-                FutureBuilder(
-              future: getBackgroundImage(context),
-              builder: (context, snapshot) {
-                return AnimatedContainer(
-                  height: double.infinity,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    image: snapshot.data == null
-                        ? null
-                        : DecorationImage(
-                            image: snapshot.data!,
-                            fit: BoxFit.cover,
-                          ),
-                  ),
-                  duration: const Duration(seconds: 1),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(
-                      sigmaX: 5000,
-                      sigmaY: 5000,
-                      tileMode: TileMode.repeated,
-                    ),
-                    child: Container(
-                      color: ColorConstants.primaryBlack.withOpacity(0.3),
-                      child: const Center(),
-                    ),
-                  ),
-                );
-              },
+          title: const Text('Now Playing'),
+          centerTitle: true,
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.more_vert),
             ),
-          ),
-          const MusicPlayerScreenBody()
-        ],
+          ],
+        ),
+        body: Stack(
+          children: [
+            Consumer<AudioPlayerController>(
+              builder: (BuildContext context, AudioPlayerController value,
+                      Widget? child) =>
+                  FutureBuilder(
+                future: getBackgroundImage(context),
+                builder: (context, snapshot) {
+                  return AnimatedContainer(
+                    height: double.infinity,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      image: snapshot.data == null
+                          ? null
+                          : DecorationImage(
+                              image: snapshot.data!,
+                              fit: BoxFit.cover,
+                            ),
+                    ),
+                    duration: const Duration(seconds: 1),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(
+                        sigmaX: 5000,
+                        sigmaY: 5000,
+                        tileMode: TileMode.repeated,
+                      ),
+                      child: Container(
+                        color: ColorConstants.primaryBlack.withOpacity(0.3),
+                        child: const Center(),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const MusicPlayerScreenBody()
+          ],
+        ),
       ),
     );
   }

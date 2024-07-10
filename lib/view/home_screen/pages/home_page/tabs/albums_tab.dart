@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_music_player/controller/album_view_screen_controller.dart';
+import 'package:flutter_music_player/controller/artist_album_view_screen_controller.dart';
 import 'package:flutter_music_player/global_widgets/album_list_item.dart';
-import 'package:flutter_music_player/view/album_view_screen/album_view_screen.dart';
+import 'package:flutter_music_player/view/artist_album_view_screen/artist_album_view_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../controller/home_screen_controller.dart';
@@ -35,7 +35,7 @@ class AlbumsTab extends StatelessWidget {
                       context: context,
                       album: songProvider.albums[index],
                     ),
-                    child: const AlbumViewScreen(),
+                    child: const ArtistAlbumViewScreen(),
                   ),
                 ),
               );
