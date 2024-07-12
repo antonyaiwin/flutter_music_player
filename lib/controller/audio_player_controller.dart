@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:carousel_slider/carousel_controller.dart';
@@ -8,6 +9,9 @@ import 'package:on_audio_query/on_audio_query.dart';
 class AudioPlayerController extends ChangeNotifier {
   // int? currentSongindex;
   List<SongModel> currentPlaylist = [];
+  ConcatenatingAudioSource playlist = ConcatenatingAudioSource(
+    children: [],
+  );
   CarouselController carouselController = CarouselController();
   final AudioPlayer _player = AudioPlayer();
   bool wasPlaying = false;
@@ -38,7 +42,7 @@ class AudioPlayerController extends ChangeNotifier {
     currentPlaylist = songList;
     // currentSongindex = index;
     // Define the playlist
-    final playlist = ConcatenatingAudioSource(
+    playlist = ConcatenatingAudioSource(
       // Start loading next item just before reaching it
       useLazyPreparation: false,
       // Customise the shuffle algorithm
@@ -165,5 +169,28 @@ class AudioPlayerController extends ChangeNotifier {
       quality: 1000,
       format: ArtworkFormat.PNG,
     );
+  }
+
+  void removeItemFromQueue(int index) {
+    log(_player.audioSource?.sequence.length.toString() ?? ' null');
+    playlist.removeAt(index);
+    log(_player.audioSource?.sequence.length.toString() ?? ' null');
+
+    currentPlaylist.removeAt(index);
+    notifyListeners();
+  }
+
+  Future<void> reorderQueue(int oldIndex, int newIndex) async {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    var item = currentPlaylist.removeAt(oldIndex);
+    currentPlaylist.insert(newIndex, item);
+    await playlist.move(oldIndex, newIndex);
+    // var playListItem = _player.audioSource?.sequence.removeAt(oldIndex);
+    // if (playListItem != null) {
+    //   _player.audioSource?.sequence.insert(newIndex, playListItem);
+    // }
+    notifyListeners();
   }
 }

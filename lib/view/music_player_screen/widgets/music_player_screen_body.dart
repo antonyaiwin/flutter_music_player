@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -63,16 +64,67 @@ class _MusicPlayerScreenBodyState extends State<MusicPlayerScreenBody>
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 600),
                       child: musicPlayerScreenController.isPlaylistVisible
-                          ? ListView.builder(
+                          ? ReorderableListView.builder(
                               itemBuilder: (context, index) {
-                                return SongListItem(
-                                  song: value.currentPlaylist[index],
-                                  onTap: () {
-                                    value.seekToIndex(index);
-                                  },
+                                return Row(
+                                  key: ValueKey(index),
+                                  children: [
+                                    const SizedBox(width: 5),
+                                    ReorderableDragStartListener(
+                                      index: index,
+                                      child: const Icon(Icons.drag_handle),
+                                    ),
+                                    Expanded(
+                                      child: SongListItem(
+                                        song: value.currentPlaylist[index],
+                                        onTap: () {
+                                          value.seekToIndex(index);
+                                        },
+                                        onMoreTap: (context) {
+                                          // Get the position of the button
+                                          final RenderBox button = context
+                                              .findRenderObject() as RenderBox;
+                                          final RenderBox overlay =
+                                              Overlay.of(context)
+                                                      .context
+                                                      .findRenderObject()
+                                                  as RenderBox;
+                                          final Offset position =
+                                              button.localToGlobal(Offset.zero,
+                                                  ancestor: overlay);
+
+                                          showMenu(
+                                            context: context,
+                                            position: RelativeRect.fromRect(
+                                              Rect.fromPoints(
+                                                position,
+                                                position.translate(
+                                                    button.size.width,
+                                                    button.size.height),
+                                              ),
+                                              Offset.zero & overlay.size,
+                                            ),
+                                            items: [
+                                              PopupMenuItem(
+                                                child: const Text(
+                                                    'Remove from queue'),
+                                                onTap: () {
+                                                  value.removeItemFromQueue(
+                                                      index);
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
                                 );
                               },
                               itemCount: value.currentPlaylist.length,
+                              onReorder: (int oldIndex, int newIndex) {
+                                value.reorderQueue(oldIndex, newIndex);
+                              },
                             )
                           : AspectRatio(
                               aspectRatio: 1,
@@ -86,36 +138,28 @@ class _MusicPlayerScreenBodyState extends State<MusicPlayerScreenBody>
                                       : Curves.easeInOut,
                                   duration: const Duration(milliseconds: 800),
                                   scale: value.isPlaying ? 0.9 : 0.6,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: FutureBuilder(
-                                      future:
-                                          value.fetchArtworkImage(index: index),
-                                      builder: (context, snapshot) {
-                                        return AnimatedContainer(
-                                          duration:
-                                              const Duration(milliseconds: 800),
-                                          decoration: BoxDecoration(
-                                            image: snapshot.connectionState ==
-                                                    ConnectionState.waiting
-                                                ? null
-                                                : DecorationImage(
-                                                    fit: BoxFit.cover,
-                                                    filterQuality:
-                                                        FilterQuality.high,
-                                                    image: snapshot.data == null
-                                                        ? const AssetImage(
-                                                            ImageConstants
-                                                                .musicBg,
-                                                          )
-                                                        : MemoryImage(
-                                                            snapshot.data!,
-                                                          ),
-                                                  ),
-                                          ),
-                                        );
-                                      },
-                                    ),
+                                  child: FutureBuilder(
+                                    future:
+                                        value.fetchArtworkImage(index: index),
+                                    builder: (context, snapshot) {
+                                      return Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        clipBehavior: Clip.hardEdge,
+                                        child: snapshot.data == null
+                                            ? Image.asset(
+                                                ImageConstants.musicBg)
+                                            : Image.memory(
+                                                snapshot.data ?? Uint8List(0),
+                                                fit: BoxFit.cover,
+                                                filterQuality:
+                                                    FilterQuality.high,
+                                                gaplessPlayback: true,
+                                              ),
+                                      );
+                                    },
                                   ),
                                 ),
                                 itemCount: value.currentPlaylist.length,
