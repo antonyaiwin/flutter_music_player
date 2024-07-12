@@ -23,7 +23,7 @@ class SongsController extends ChangeNotifier {
   bool _hasPermission = false;
 
   Future<void> getAudio() async {
-    await _audioQuery.scanMedia('/storage/emulated/0/');
+    _audioQuery.scanMedia('/storage/emulated/0/');
 
     // Query Audios
     songs = await _audioQuery.querySongs();
