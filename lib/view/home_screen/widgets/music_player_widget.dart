@@ -83,7 +83,7 @@ class _MusicPlayerWidgetState extends State<MusicPlayerWidget>
                     RotationTransition(
                       turns: rotationAnimationController,
                       child: CircleAvatar(
-                        radius: 25,
+                        radius: 23,
                         backgroundImage:
                             const AssetImage(ImageConstants.recordDisc),
                         child: Padding(
@@ -101,6 +101,7 @@ class _MusicPlayerWidgetState extends State<MusicPlayerWidget>
                                     fit: BoxFit.cover,
                                     height: 50,
                                     width: 50,
+                                    gaplessPlayback: true,
                                   ),
                           ),
                         ),

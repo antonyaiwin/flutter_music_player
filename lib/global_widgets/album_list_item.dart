@@ -42,6 +42,7 @@ class AlbumListItem extends StatelessWidget {
                 height: 50,
                 fit: BoxFit.cover,
               ),
+              keepOldArtwork: true,
             );
           },
         ),

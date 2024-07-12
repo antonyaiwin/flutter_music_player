@@ -13,27 +13,27 @@ class SongListItem extends StatelessWidget {
     super.key,
     required this.song,
     this.onTap,
+    this.onMoreTap,
   });
 
   final SongModel song;
   final void Function()? onTap;
+  final void Function(BuildContext context)? onMoreTap;
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
-      leading: ClipRRect(
-        borderRadius: BorderRadius.circular(5),
-        child: QueryArtworkWidget(
-          id: song.id,
-          type: ArtworkType.AUDIO,
-          artworkBorder: BorderRadius.zero,
-          nullArtworkWidget: Image.asset(
-            ImageConstants.musicBg,
-            width: 50,
-            height: 50,
-            fit: BoxFit.cover,
-          ),
+      leading: QueryArtworkWidget(
+        id: song.id,
+        type: ArtworkType.AUDIO,
+        artworkBorder: BorderRadius.circular(5),
+        nullArtworkWidget: Image.asset(
+          ImageConstants.musicBg,
+          width: 50,
+          height: 50,
+          fit: BoxFit.cover,
         ),
+        keepOldArtwork: true,
       ),
       title: Consumer<AudioPlayerController>(
         builder: (context, value, child) => Row(
@@ -82,6 +82,21 @@ class SongListItem extends StatelessWidget {
           ),
         ],
       ),
+      contentPadding: const EdgeInsets.only(
+        left: 15,
+      ),
+      trailing: onMoreTap == null
+          ? null
+          : Builder(
+              builder: (context) {
+                return IconButton(
+                  onPressed: () {
+                    onMoreTap!(context);
+                  },
+                  icon: const Icon(Icons.more_vert),
+                );
+              },
+            ),
     );
   }
 }

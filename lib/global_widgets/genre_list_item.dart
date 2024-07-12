@@ -25,6 +25,7 @@ class GenreListItem extends StatelessWidget {
           height: 50,
           fit: BoxFit.cover,
         ),
+        keepOldArtwork: true,
       ),
       title: Text(genre.genre),
     );
