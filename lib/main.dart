@@ -5,9 +5,16 @@ import 'package:flutter_music_player/controller/search_page_controller.dart';
 import 'package:flutter_music_player/controller/songs_controller.dart';
 import 'package:flutter_music_player/core/constants/color_constants.dart';
 import 'package:flutter_music_player/view/home_screen/home_screen.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+Future<void> main() async {
+  await JustAudioBackground.init(
+    androidNotificationChannelId:
+        'com.example.flutter_music_player.channel.audio',
+    androidNotificationChannelName: 'Audio playback',
+    androidNotificationOngoing: true,
+  );
   runApp(const MyApp());
 }
 

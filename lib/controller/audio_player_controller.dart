@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class AudioPlayerController extends ChangeNotifier {
@@ -50,7 +51,18 @@ class AudioPlayerController extends ChangeNotifier {
       // Specify the playlist items
       children: songList
           .map(
-            (e) => AudioSource.file(e.data, tag: e.id),
+            (e) => AudioSource.file(
+              e.data,
+              tag: MediaItem(
+                // Specify a unique ID for each media item:
+                id: e.id.toString(),
+                // Metadata to display in the notification:
+                album: e.album,
+                title: e.title,
+                artUri: Uri.parse(
+                    'https://upload.wikimedia.org/wikipedia/en/9/99/Manjummel_Boys_poster.jpg'),
+              ),
+            ),
           )
           .toList(),
     );

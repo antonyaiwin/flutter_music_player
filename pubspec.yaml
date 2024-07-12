@@ -39,7 +39,7 @@ dependencies:
   provider: ^6.1.2
   on_audio_query: ^2.9.0
   icons_plus: ^5.0.0
-  just_audio_background: ^0.0.1-beta.12
+  just_audio_background: ^0.0.1-beta.13
   text_marquee: ^0.0.2
   syncfusion_flutter_sliders: ^26.1.39
   collection: ^1.18.0
