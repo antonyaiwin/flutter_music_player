@@ -7,9 +7,12 @@ import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
+import '../utils/functions/file_utils.dart';
+
 class AudioPlayerController extends ChangeNotifier {
   // int? currentSongindex;
   List<SongModel> currentPlaylist = [];
+  String thumbPath = '';
   ConcatenatingAudioSource playlist = ConcatenatingAudioSource(
     children: [],
   );
@@ -19,11 +22,13 @@ class AudioPlayerController extends ChangeNotifier {
   Uint8List? imageArtwork;
 
   AudioPlayerController() {
+    loadThumbPath();
     _player.currentIndexStream.listen(
       (event) async {
         // currentSongindex = event;
         carouselController.animateToPage(event ?? currentIndex ?? 0);
         imageArtwork = await fetchArtworkImage();
+        saveUint8ListToFile(imageArtwork, currentPlaylist[event ?? -1].id);
         notifyListeners();
       },
     );
@@ -36,6 +41,10 @@ class AudioPlayerController extends ChangeNotifier {
         }
       },
     );
+  }
+
+  Future<void> loadThumbPath() async {
+    thumbPath = await getThumbDirectoryPath();
   }
 
   Future<void> onAudioTouch(int index, List<SongModel> songList) async {
@@ -59,8 +68,7 @@ class AudioPlayerController extends ChangeNotifier {
                 // Metadata to display in the notification:
                 album: e.album,
                 title: e.title,
-                artUri: Uri.parse(
-                    'https://upload.wikimedia.org/wikipedia/en/9/99/Manjummel_Boys_poster.jpg'),
+                artUri: Uri.parse('file://$thumbPath/song_${e.id}.png'),
               ),
             ),
           )
@@ -74,6 +82,7 @@ class AudioPlayerController extends ChangeNotifier {
 
     notifyListeners();
     imageArtwork = await fetchArtworkImage();
+    saveUint8ListToFile(imageArtwork, currentSong?.id ?? -1);
     notifyListeners();
   }
 
