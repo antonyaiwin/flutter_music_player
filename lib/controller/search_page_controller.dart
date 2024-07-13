@@ -8,6 +8,7 @@ class SearchPageController extends ChangeNotifier {
 
   List<AlbumModel> albums = [];
   List<ArtistModel> artists = [];
+  TextEditingController searchTextController = TextEditingController();
 
   onSearchQueryChanged({required BuildContext context, required String query}) {
     query = query.toLowerCase();
@@ -40,6 +41,15 @@ class SearchPageController extends ChangeNotifier {
         )
         .toList();
 
+    notifyListeners();
+  }
+
+  bool get isSearchQueryEmpty => searchTextController.text.isEmpty;
+
+  bool get isResultsEmpty => songs.isEmpty && albums.isEmpty && artists.isEmpty;
+
+  void clearSearch() {
+    searchTextController.clear();
     notifyListeners();
   }
 }
