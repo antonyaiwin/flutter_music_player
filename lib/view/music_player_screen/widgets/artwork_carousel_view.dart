@@ -34,16 +34,17 @@ class ArtworkCarouselView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   clipBehavior: Clip.hardEdge,
-                  child: snapshot.connectionState == ConnectionState.waiting
-                      ? null
-                      : snapshot.data == null
-                          ? Image.asset(ImageConstants.musicBg)
-                          : Image.memory(
+                  child: snapshot.data == null &&
+                          snapshot.connectionState == ConnectionState.done
+                      ? Image.asset(ImageConstants.musicBg)
+                      : snapshot.data != null
+                          ? Image.memory(
                               snapshot.data ?? Uint8List(0),
                               fit: BoxFit.cover,
                               filterQuality: FilterQuality.high,
                               gaplessPlayback: true,
-                            ),
+                            )
+                          : null,
                 );
               },
             ),
