@@ -56,14 +56,7 @@ class _MusicPlayerScreenBodyState extends State<MusicPlayerScreenBody>
                   Widget? child,
                 ) =>
                     Expanded(
-                  child: PageView.builder(
-                    controller: musicPlayerScreenController.pageController,
-                    itemBuilder: (context, index) =>
-                        musicPlayerScreenController.playerWidgets[index],
-                    itemCount: musicPlayerScreenController.playerWidgets.length,
-                  ),
-
-                  /* Center(
+                  child: Center(
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 600),
                       child: musicPlayerScreenController.playerWidgets[
@@ -71,8 +64,7 @@ class _MusicPlayerScreenBodyState extends State<MusicPlayerScreenBody>
                               ? 0
                               : 1],
                     ),
-                  ) */
-                  // ,
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
