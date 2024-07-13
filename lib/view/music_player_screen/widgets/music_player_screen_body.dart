@@ -1,19 +1,15 @@
 import 'dart:developer';
-import 'dart:typed_data';
 
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_music_player/controller/audio_player_controller.dart';
 import 'package:flutter_music_player/controller/music_player_screen_controller.dart';
 import 'package:flutter_music_player/core/constants/color_constants.dart';
-import 'package:flutter_music_player/global_widgets/song_list_item.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:text_marquee/text_marquee.dart';
 
-import '../../../core/constants/image_constants.dart';
 import '../../../utils/functions/audio_functions.dart';
 
 class MusicPlayerScreenBody extends StatefulWidget {
@@ -60,124 +56,23 @@ class _MusicPlayerScreenBodyState extends State<MusicPlayerScreenBody>
                   Widget? child,
                 ) =>
                     Expanded(
-                  child: Center(
+                  child: PageView.builder(
+                    controller: musicPlayerScreenController.pageController,
+                    itemBuilder: (context, index) =>
+                        musicPlayerScreenController.playerWidgets[index],
+                    itemCount: musicPlayerScreenController.playerWidgets.length,
+                  ),
+
+                  /* Center(
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 600),
-                      child: musicPlayerScreenController.isPlaylistVisible
-                          ? ReorderableListView.builder(
-                              itemBuilder: (context, index) {
-                                return Row(
-                                  key: ValueKey(index),
-                                  children: [
-                                    const SizedBox(width: 5),
-                                    ReorderableDragStartListener(
-                                      index: index,
-                                      child: const Icon(Icons.drag_handle),
-                                    ),
-                                    Expanded(
-                                      child: SongListItem(
-                                        song: value.currentPlaylist[index],
-                                        onTap: () {
-                                          value.seekToIndex(index);
-                                        },
-                                        onMoreTap: (context) {
-                                          // Get the position of the button
-                                          final RenderBox button = context
-                                              .findRenderObject() as RenderBox;
-                                          final RenderBox overlay =
-                                              Overlay.of(context)
-                                                      .context
-                                                      .findRenderObject()
-                                                  as RenderBox;
-                                          final Offset position =
-                                              button.localToGlobal(Offset.zero,
-                                                  ancestor: overlay);
-
-                                          showMenu(
-                                            context: context,
-                                            position: RelativeRect.fromRect(
-                                              Rect.fromPoints(
-                                                position,
-                                                position.translate(
-                                                    button.size.width,
-                                                    button.size.height),
-                                              ),
-                                              Offset.zero & overlay.size,
-                                            ),
-                                            items: [
-                                              PopupMenuItem(
-                                                child: const Text(
-                                                    'Remove from queue'),
-                                                onTap: () {
-                                                  value.removeItemFromQueue(
-                                                      index);
-                                                },
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                              itemCount: value.currentPlaylist.length,
-                              onReorder: (int oldIndex, int newIndex) {
-                                value.reorderQueue(oldIndex, newIndex);
-                              },
-                            )
-                          : AspectRatio(
-                              aspectRatio: 1,
-                              child: CarouselSlider.builder(
-                                carouselController: value.carouselController,
-                                itemBuilder: (BuildContext context, int index,
-                                        int realIndex) =>
-                                    AnimatedScale(
-                                  curve: value.isPlaying
-                                      ? Curves.easeOutBack
-                                      : Curves.easeInOut,
-                                  duration: const Duration(milliseconds: 800),
-                                  scale: value.isPlaying ? 0.9 : 0.6,
-                                  child: FutureBuilder(
-                                    future:
-                                        value.fetchArtworkImage(index: index),
-                                    builder: (context, snapshot) {
-                                      return Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        clipBehavior: Clip.hardEdge,
-                                        child: snapshot.data == null
-                                            ? Image.asset(
-                                                ImageConstants.musicBg)
-                                            : Image.memory(
-                                                snapshot.data ?? Uint8List(0),
-                                                fit: BoxFit.cover,
-                                                filterQuality:
-                                                    FilterQuality.high,
-                                                gaplessPlayback: true,
-                                              ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                                itemCount: value.currentPlaylist.length,
-                                options: CarouselOptions(
-                                  initialPage: value.currentIndex ?? 0,
-                                  aspectRatio: 1,
-                                  viewportFraction: 1,
-                                  onPageChanged: (index, reason) {
-                                    if (reason ==
-                                        CarouselPageChangedReason.manual) {
-                                      value.seekToIndex(index);
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
+                      child: musicPlayerScreenController.playerWidgets[
+                          musicPlayerScreenController.isPlaylistVisible
+                              ? 0
+                              : 1],
                     ),
-                  ),
+                  ) */
+                  // ,
                 ),
               ),
               const SizedBox(height: 20),

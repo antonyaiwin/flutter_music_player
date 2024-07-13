@@ -17,7 +17,8 @@ class MusicPlayerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (BuildContext context) => MusicPlayerScreenController(),
+      create: (BuildContext context) =>
+          MusicPlayerScreenController(context: context),
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(

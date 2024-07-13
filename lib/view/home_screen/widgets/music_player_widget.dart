@@ -87,7 +87,7 @@ class _MusicPlayerWidgetState extends State<MusicPlayerWidget>
                         backgroundImage:
                             const AssetImage(ImageConstants.recordDisc),
                         child: Padding(
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(5),
                           child: ClipOval(
                             child: value.imageArtwork == null
                                 ? Image.asset(

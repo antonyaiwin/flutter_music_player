@@ -14,11 +14,13 @@ class SongListItem extends StatelessWidget {
     required this.song,
     this.onTap,
     this.onMoreTap,
+    this.contentPadding,
   });
 
   final SongModel song;
   final void Function()? onTap;
   final void Function(BuildContext context)? onMoreTap;
+  final EdgeInsetsGeometry? contentPadding;
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -82,9 +84,7 @@ class SongListItem extends StatelessWidget {
           ),
         ],
       ),
-      contentPadding: const EdgeInsets.only(
-        left: 15,
-      ),
+      contentPadding: contentPadding,
       trailing: onMoreTap == null
           ? null
           : Builder(

@@ -26,10 +26,15 @@ class AudioPlayerController extends ChangeNotifier {
     _player.currentIndexStream.listen(
       (event) async {
         // currentSongindex = event;
-        carouselController.animateToPage(event ?? currentIndex ?? 0);
+        if (carouselController.ready) {
+          carouselController.animateToPage(event ?? currentIndex ?? 0);
+        }
         imageArtwork = await fetchArtworkImage();
-        saveUint8ListToFile(imageArtwork, currentPlaylist[event ?? -1].id);
         notifyListeners();
+        if (event != null) {
+          await saveUint8ListToFile(imageArtwork, currentPlaylist[event].id);
+          notifyListeners();
+        }
       },
     );
 
@@ -39,6 +44,11 @@ class AudioPlayerController extends ChangeNotifier {
           await _player.pause();
           _player.seek(Duration.zero, index: 0);
         }
+      },
+    );
+    _player.playingStream.listen(
+      (event) async {
+        notifyListeners();
       },
     );
   }
@@ -80,7 +90,7 @@ class AudioPlayerController extends ChangeNotifier {
     );
     _player.play();
 
-    notifyListeners();
+    // notifyListeners();
     imageArtwork = await fetchArtworkImage();
     saveUint8ListToFile(imageArtwork, currentSong?.id ?? -1);
     notifyListeners();
@@ -118,7 +128,7 @@ class AudioPlayerController extends ChangeNotifier {
     } else {
       _player.play();
     }
-    notifyListeners();
+    // notifyListeners();
   }
 
   Future<void> nextAudio() async {
@@ -213,5 +223,15 @@ class AudioPlayerController extends ChangeNotifier {
     //   _player.audioSource?.sequence.insert(newIndex, playListItem);
     // }
     notifyListeners();
+  }
+
+  void addIndexListener(Function(int index) function) {
+    _player.currentIndexStream.listen(
+      (event) {
+        if (event != null) {
+          function(event);
+        }
+      },
+    );
   }
 }
