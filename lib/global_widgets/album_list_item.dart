@@ -55,7 +55,7 @@ class AlbumListItem extends StatelessWidget {
       subtitle: Text(
         '${album.numOfSongs} song${album.numOfSongs > 1 ? 's' : ''} • ${album.artist ?? ''}',
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: ColorConstants.hintColor,
+              color: ColorConstants.primaryWhite.withOpacity(0.6),
             ),
       ),
     );

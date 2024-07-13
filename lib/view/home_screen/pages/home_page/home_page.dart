@@ -13,9 +13,13 @@ class HomePage extends StatelessWidget {
       child: DefaultTabController(
         length: 4,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TabBar(
               isScrollable: true,
+              indicatorSize: TabBarIndicatorSize.label,
+              tabAlignment: TabAlignment.start,
+              dividerHeight: 0,
               tabs: [
                 Tab(
                   text: 'Songs',

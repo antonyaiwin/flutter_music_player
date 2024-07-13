@@ -71,7 +71,7 @@ class SongListItem extends StatelessWidget {
           Text(
             song.artist ?? '',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: ColorConstants.hintColor,
+                  color: ColorConstants.primaryWhite.withOpacity(0.6),
                 ),
           ),
           Text(
@@ -79,7 +79,7 @@ class SongListItem extends StatelessWidget {
                 ? getTimeFromDuration(Duration(milliseconds: song.duration!))
                 : '',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: ColorConstants.hintColor,
+                  color: ColorConstants.primaryWhite.withOpacity(0.6),
                 ),
           ),
         ],

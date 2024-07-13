@@ -53,7 +53,7 @@ class ArtistListItem extends StatelessWidget {
             ? '${artist.numberOfTracks} song${artist.numberOfTracks! > 1 ? 's' : ''}'
             : '',
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: ColorConstants.hintColor,
+              color: ColorConstants.primaryWhite.withOpacity(0.6),
             ),
       ),
     );
