@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_music_player/view/home_screen/pages/home_page/tabs/albums_tab.dart';
 import 'package:flutter_music_player/view/home_screen/pages/home_page/tabs/artists_tab.dart';
-import 'package:flutter_music_player/view/home_screen/pages/home_page/tabs/genres_tab.dart';
 
 import 'tabs/songs_tab.dart';
 
@@ -27,9 +26,6 @@ class HomePage extends StatelessWidget {
                 Tab(
                   text: 'Albums',
                 ),
-                Tab(
-                  text: 'Genre',
-                ),
               ],
             ),
             Expanded(
@@ -38,7 +34,6 @@ class HomePage extends StatelessWidget {
                   SongsTab(),
                   ArtistsTab(),
                   AlbumsTab(),
-                  GenresTab(),
                 ],
               ),
             ),
