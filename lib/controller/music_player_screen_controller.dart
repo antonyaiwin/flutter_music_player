@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,12 +38,11 @@ class MusicPlayerScreenController extends ChangeNotifier {
   }
 
   void scrollToSong() {
-    log('scroll to song');
     double offsetv =
         72.0 * (context.read<AudioPlayerController>().currentIndex ?? 0);
     if (scrollController.hasClients) {
       scrollController.animateTo(
-        offsetv,
+        min(offsetv, scrollController.position.maxScrollExtent),
         duration: const Duration(milliseconds: 700),
         curve: Curves.easeInOut,
       );
