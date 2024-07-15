@@ -1,7 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_music_player/controller/playlist_view_screen_controller.dart';
 import 'package:flutter_music_player/controller/songs_controller.dart';
+import 'package:flutter_music_player/global_widgets/playlist_list_item.dart';
+import 'package:flutter_music_player/view/playlist_view_screen/playlist_view_screen.dart';
 import 'package:provider/provider.dart';
 
 class PlaylistPage extends StatelessWidget {
@@ -28,8 +31,20 @@ class PlaylistPage extends StatelessWidget {
           return ListView.builder(
             itemBuilder: (context, index) {
               var playlist = value.playlists[index];
-              return ListTile(
-                title: Text(playlist.playlist),
+              return PlaylistListItem(
+                playlist: playlist,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChangeNotifierProvider(
+                        create: (context) => PlaylistViewScreenController(
+                            context: context, playlist: playlist),
+                        child: const PlaylistViewScreen(),
+                      ),
+                    ),
+                  );
+                },
               );
             },
             itemCount: value.playlists.length,
