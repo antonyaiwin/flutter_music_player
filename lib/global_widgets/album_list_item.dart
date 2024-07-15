@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
-import 'package:provider/provider.dart';
 
-import '../controller/songs_controller.dart';
 import '../core/constants/color_constants.dart';
 import '../core/constants/image_constants.dart';
 
@@ -21,30 +19,17 @@ class AlbumListItem extends StatelessWidget {
       onTap: onTap,
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(5),
-        child: FutureBuilder(
-          future: getFirstSongIdWithAlbumnId(album.id, context),
-          builder: (context, snapshot) {
-            if (snapshot.data == null) {
-              return Image.asset(
-                ImageConstants.musicBg,
-                width: 50,
-                height: 50,
-                fit: BoxFit.cover,
-              );
-            }
-            return QueryArtworkWidget(
-              id: snapshot.data!,
-              type: ArtworkType.AUDIO,
-              artworkBorder: BorderRadius.zero,
-              nullArtworkWidget: Image.asset(
-                ImageConstants.musicBg,
-                width: 50,
-                height: 50,
-                fit: BoxFit.cover,
-              ),
-              keepOldArtwork: true,
-            );
-          },
+        child: QueryArtworkWidget(
+          id: album.id,
+          type: ArtworkType.ALBUM,
+          artworkBorder: BorderRadius.zero,
+          nullArtworkWidget: Image.asset(
+            ImageConstants.musicBg,
+            width: 50,
+            height: 50,
+            fit: BoxFit.cover,
+          ),
+          keepOldArtwork: true,
         ),
       ),
       title: Text(
@@ -59,23 +44,5 @@ class AlbumListItem extends StatelessWidget {
             ),
       ),
     );
-  }
-
-  Future<int?> getFirstSongIdWithAlbumnId(int id, BuildContext context) async {
-    var list = context.read<SongsController>().songs.where(
-      (element) {
-        return element.albumId == id;
-      },
-    );
-    if (list.isNotEmpty) {
-      for (var element in list) {
-        var image =
-            await context.read<SongsController>().getSongImage(element.id);
-        if (image != null) {
-          return element.id;
-        }
-      }
-    }
-    return null;
   }
 }
