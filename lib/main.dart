@@ -4,7 +4,7 @@ import 'package:flutter_music_player/controller/home_screen_controller.dart';
 import 'package:flutter_music_player/controller/search_page_controller.dart';
 import 'package:flutter_music_player/controller/songs_controller.dart';
 import 'package:flutter_music_player/core/constants/color_constants.dart';
-import 'package:flutter_music_player/view/home_screen/home_screen.dart';
+import 'package:flutter_music_player/view/splash_screen/splash_screen.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
 
@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
           ),
           useMaterial3: true,
         ),
-        home: const HomeScreen(),
+        home: const SplashScreen(),
       ),
     );
   }
