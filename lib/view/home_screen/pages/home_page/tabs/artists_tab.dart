@@ -24,6 +24,7 @@ class ArtistsTab extends StatelessWidget {
           );
         }
         return ListView.builder(
+          padding: const EdgeInsets.only(bottom: 200),
           itemBuilder: (context, index) {
             var listItem = ArtistListItem(
               artist: songProvider.artists[index],

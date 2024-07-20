@@ -43,12 +43,23 @@ class _MusicPlayerWidgetState extends State<MusicPlayerWidget>
     var provider = context.read<AudioPlayerController>();
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const MusicPlayerScreen(),
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          builder: (context) => DraggableScrollableSheet(
+            initialChildSize: 1,
+            minChildSize: 1,
+            builder: (context, scrollController) {
+              return const MusicPlayerScreen();
+            },
           ),
         );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => const MusicPlayerScreen(),
+        //   ),
+        // );
       },
       child: Consumer<AudioPlayerController>(
         builder:

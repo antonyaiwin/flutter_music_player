@@ -5,7 +5,6 @@ import 'package:flutter_music_player/controller/audio_player_controller.dart';
 import 'package:flutter_music_player/controller/music_player_screen_controller.dart';
 import 'package:flutter_music_player/core/constants/color_constants.dart';
 import 'package:flutter_music_player/core/constants/image_constants.dart';
-import 'package:icons_plus/icons_plus.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
@@ -21,24 +20,6 @@ class MusicPlayerScreen extends StatelessWidget {
           MusicPlayerScreenController(context: context),
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          surfaceTintColor: Colors.transparent,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Iconsax.arrow_down_1_outline),
-          ),
-          title: const Text('Now Playing'),
-          centerTitle: true,
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.more_vert),
-            ),
-          ],
-        ),
         body: Stack(
           children: [
             Stack(

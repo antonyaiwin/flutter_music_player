@@ -49,6 +49,30 @@ class _MusicPlayerScreenBodyState extends State<MusicPlayerScreenBody>
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Padding(
+                padding: EdgeInsets.only(
+                    top: MediaQueryData.fromView(
+                  View.of(context),
+                ).padding.top),
+                child: AppBar(
+                  backgroundColor: Colors.transparent,
+                  surfaceTintColor: Colors.transparent,
+                  leading: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(Iconsax.arrow_down_1_outline),
+                  ),
+                  title: const Text('Now Playing'),
+                  centerTitle: true,
+                  actions: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.more_vert),
+                    ),
+                  ],
+                ),
+              ),
               Consumer<MusicPlayerScreenController>(
                 builder: (
                   BuildContext context,

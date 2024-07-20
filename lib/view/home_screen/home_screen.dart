@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_music_player/core/constants/color_constants.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:provider/provider.dart';
 
@@ -28,42 +29,52 @@ class HomeScreen extends StatelessWidget {
             context.read<HomeScreenController>().changePage(0);
           }
         },
-        child: Column(
+        child: Stack(
           children: [
-            Expanded(
-              child: PageView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: context.read<HomeScreenController>().pageController,
-                children: context.read<HomeScreenController>().pageList,
+            PageView(
+              physics: const NeverScrollableScrollPhysics(),
+              controller: context.read<HomeScreenController>().pageController,
+              children: context.read<HomeScreenController>().pageList,
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              left: 0,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const MusicPlayerWidget(),
+                  Consumer<HomeScreenController>(
+                    builder: (context, value, child) => BottomNavigationBar(
+                      currentIndex: provider.selectedPageIndex,
+                      backgroundColor:
+                          ColorConstants.primaryBlack.withOpacity(0.7),
+                      onTap: (value) {
+                        provider.changePage(value);
+                      },
+                      showSelectedLabels: false,
+                      showUnselectedLabels: false,
+                      items: const [
+                        BottomNavigationBarItem(
+                          icon: Icon(Iconsax.home_2_outline),
+                          activeIcon: Icon(Iconsax.home_2_bold),
+                          label: '',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Icon(Iconsax.search_normal_1_outline),
+                          activeIcon: Icon(Iconsax.search_normal_1_bold),
+                          label: '',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Icon(Iconsax.music_playlist_outline),
+                          activeIcon: Icon(Iconsax.music_playlist_bold),
+                          label: '',
+                        ),
+                      ],
+                    ),
+                  )
+                ],
               ),
-            ),
-            const MusicPlayerWidget(),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Consumer<HomeScreenController>(
-        builder: (context, value, child) => BottomNavigationBar(
-          currentIndex: provider.selectedPageIndex,
-          onTap: (value) {
-            provider.changePage(value);
-          },
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Iconsax.home_2_outline),
-              activeIcon: Icon(Iconsax.home_2_bold),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Iconsax.search_normal_1_outline),
-              activeIcon: Icon(Iconsax.search_normal_1_bold),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Iconsax.music_playlist_outline),
-              activeIcon: Icon(Iconsax.music_playlist_bold),
-              label: '',
             ),
           ],
         ),

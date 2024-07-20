@@ -24,6 +24,7 @@ class AlbumsTab extends StatelessWidget {
           );
         }
         return ListView.builder(
+          padding: const EdgeInsets.only(bottom: 200),
           itemBuilder: (context, index) => AlbumListItem(
             album: songProvider.albums[index],
             onTap: () {

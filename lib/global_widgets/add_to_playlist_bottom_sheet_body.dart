@@ -45,25 +45,8 @@ class AddToPlaylistBottomSheetBody extends StatelessWidget {
                           title: Text(
                             playlist.playlist,
                           ),
-                          onTap: () async {
-                            if (await _onPlaylistTap(songsController, index,
-                                    bottomSheetController) &&
-                                context.mounted) {
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      'Song Added to ${playlist.playlist}'),
-                                ),
-                              );
-                            } else {
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Something went wrong!'),
-                                ),
-                              );
-                            }
+                          onTap: () {
+                            bottomSheetController.onPlaylistTap(playlist);
                           },
                         );
                       },
@@ -90,14 +73,6 @@ class AddToPlaylistBottomSheetBody extends StatelessWidget {
         },
         child: const Icon(Icons.add),
       ),
-    );
-  }
-
-  Future<bool> _onPlaylistTap(SongsController songsController, int index,
-      AddToPlaylistBottomSheetController bottomSheetController) {
-    return songsController.addSongToPlaylist(
-      playlistId: songsController.playlists[index].id,
-      songId: bottomSheetController.song.id,
     );
   }
 }
