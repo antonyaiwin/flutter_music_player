@@ -8,7 +8,8 @@ class SongsController extends ChangeNotifier {
   final OnAudioQuery _audioQuery = OnAudioQuery();
 
   //  Songs List
-  List<SongModel> songs = [];
+  List<SongModel> _songs = [];
+  List<SongModel> get songs => _songs.toList();
 
   //  Albums List
   List<AlbumModel> albums = [];
@@ -26,7 +27,7 @@ class SongsController extends ChangeNotifier {
     _audioQuery.scanMedia('/storage/emulated/0/');
 
     // Query Audios
-    songs = await _audioQuery.querySongs();
+    _songs = await _audioQuery.querySongs();
 
     // Query Albums
     albums = await _audioQuery.queryAlbums();
@@ -61,29 +62,41 @@ class SongsController extends ChangeNotifier {
   }
 
   Future<bool> createPlaylist(String name) async {
-    return await _audioQuery.createPlaylist(name);
+    return await _audioQuery.createPlaylist(name).whenComplete(
+          () => _refreshPlaylists(),
+        );
   }
 
   Future<bool> deletePlaylist({required int playlistId}) async {
-    return await _audioQuery.removePlaylist(playlistId);
+    return await _audioQuery.removePlaylist(playlistId).whenComplete(
+          () => _refreshPlaylists(),
+        );
   }
 
   Future<bool> renamePlaylist(
       {required int playlistId, required String newName}) async {
-    return await _audioQuery.renamePlaylist(playlistId, newName);
+    return await _audioQuery.renamePlaylist(playlistId, newName).whenComplete(
+          () => _refreshPlaylists(),
+        );
   }
 
   Future<bool> addSongToPlaylist(
       {required int playlistId, required int songId}) async {
-    return await _audioQuery.addToPlaylist(playlistId, songId);
+    return await _audioQuery.addToPlaylist(playlistId, songId).whenComplete(
+          () => _refreshPlaylists(),
+        );
   }
 
   Future<bool> removeSongFromPlaylist(
       {required int playlistId, required int songId}) async {
-    return await _audioQuery.removeFromPlaylist(playlistId, songId);
+    return await _audioQuery
+        .removeFromPlaylist(playlistId, songId)
+        .whenComplete(
+          () => _refreshPlaylists(),
+        );
   }
 
-  Future<void> refreshPlaylists() async {
+  Future<void> _refreshPlaylists() async {
     playlists = await _audioQuery.queryPlaylists();
     notifyListeners();
   }

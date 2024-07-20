@@ -13,14 +13,14 @@ class SongListItem extends StatelessWidget {
     super.key,
     required this.song,
     this.onTap,
-    this.onMoreTap,
     this.contentPadding,
+    this.trailing,
   });
 
   final SongModel song;
   final void Function()? onTap;
-  final void Function(BuildContext context)? onMoreTap;
   final EdgeInsetsGeometry? contentPadding;
+  final Widget? trailing;
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -85,18 +85,7 @@ class SongListItem extends StatelessWidget {
         ],
       ),
       contentPadding: contentPadding,
-      trailing: onMoreTap == null
-          ? null
-          : Builder(
-              builder: (context) {
-                return IconButton(
-                  onPressed: () {
-                    onMoreTap!(context);
-                  },
-                  icon: const Icon(Icons.more_vert),
-                );
-              },
-            ),
+      trailing: trailing,
     );
   }
 }

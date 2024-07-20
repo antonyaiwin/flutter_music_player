@@ -53,7 +53,7 @@ class _MusicPlayerWidgetState extends State<MusicPlayerWidget>
       child: Consumer<AudioPlayerController>(
         builder:
             (BuildContext context, AudioPlayerController value, Widget? child) {
-          if (provider.currentIndex == null) {
+          if (provider.currentIndex == null || provider.playlist.length == 0) {
             return const SizedBox();
           }
           log('isplaying ${value.isPlaying}');

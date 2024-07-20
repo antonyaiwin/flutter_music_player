@@ -41,38 +41,18 @@ class CurrentPlaylistListView extends StatelessWidget {
                     contentPadding: const EdgeInsets.only(
                       left: 15,
                     ),
-                    onMoreTap: (context) {
-                      // Get the position of the button
-                      final RenderBox button =
-                          context.findRenderObject() as RenderBox;
-                      final RenderBox overlay = Overlay.of(context)
-                          .context
-                          .findRenderObject() as RenderBox;
-                      final Offset position =
-                          button.localToGlobal(Offset.zero, ancestor: overlay);
-
-                      showMenu(
-                        context: context,
-                        position: RelativeRect.fromRect(
-                          Rect.fromPoints(
-                            position,
-                            position.translate(
-                                button.size.width, button.size.height),
-                          ),
-                          Offset.zero & overlay.size,
+                    trailing: PopupMenuButton(
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          child: const Text('Remove from queue'),
+                          onTap: () {
+                            value.removeItemFromQueue(
+                              index,
+                            );
+                          },
                         ),
-                        items: [
-                          PopupMenuItem(
-                            child: const Text('Remove from queue'),
-                            onTap: () {
-                              value.removeItemFromQueue(
-                                index,
-                              );
-                            },
-                          ),
-                        ],
-                      );
-                    },
+                      ],
+                    ),
                   ),
                 ),
               ],

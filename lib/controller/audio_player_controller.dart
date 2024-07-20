@@ -51,6 +51,9 @@ class AudioPlayerController extends ChangeNotifier {
         notifyListeners();
       },
     );
+    _player.setAudioSource(
+      playlist,
+    );
   }
 
   Future<void> loadThumbPath() async {
@@ -103,7 +106,7 @@ class AudioPlayerController extends ChangeNotifier {
   Duration? get duration => _player.duration;
   Stream<Duration> get positionStream => _player.positionStream;
   SongModel? get currentSong {
-    if (currentIndex == null) {
+    if (currentIndex == null || playlist.length == 0) {
       return null;
     } else {
       var id = _player.audioSource?.sequence.elementAt(currentIndex!).tag;
@@ -233,5 +236,53 @@ class AudioPlayerController extends ChangeNotifier {
         }
       },
     );
+  }
+
+  Future<void> addNextSongInQueue(SongModel song) async {
+    if (playlist.length == 0) {
+      await addSongInQueue(song);
+      return;
+    }
+    int index = (currentIndex ?? -1) + 1;
+    currentPlaylist.insert(index, song);
+    await playlist.insert(
+      index,
+      AudioSource.file(
+        song.data,
+        tag: MediaItem(
+          // Specify a unique ID for each media item:
+          id: song.id.toString(),
+          // Metadata to display in the notification:
+          album: song.album,
+          title: song.title,
+          artUri: Uri.parse('file://$thumbPath/song_${song.id}.png'),
+        ),
+      ),
+    );
+    if (playlist.length == 1) {
+      _player.play();
+    }
+    notifyListeners();
+  }
+
+  Future<void> addSongInQueue(SongModel song) async {
+    currentPlaylist.add(song);
+    await playlist.add(
+      AudioSource.file(
+        song.data,
+        tag: MediaItem(
+          // Specify a unique ID for each media item:
+          id: song.id.toString(),
+          // Metadata to display in the notification:
+          album: song.album,
+          title: song.title,
+          artUri: Uri.parse('file://$thumbPath/song_${song.id}.png'),
+        ),
+      ),
+    );
+    if (playlist.length == 1) {
+      _player.play();
+    }
+    notifyListeners();
   }
 }

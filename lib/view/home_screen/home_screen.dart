@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:provider/provider.dart';
 
@@ -12,17 +15,31 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var provider = context.read<HomeScreenController>();
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: PageView(
-              physics: const NeverScrollableScrollPhysics(),
-              controller: context.read<HomeScreenController>().pageController,
-              children: context.read<HomeScreenController>().pageList,
+      body: PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) {
+          if (didPop) {
+            return;
+          }
+          log('pop');
+          if (context.read<HomeScreenController>().selectedPageIndex == 0) {
+            SystemNavigator.pop();
+          } else {
+            context.read<HomeScreenController>().changePage(0);
+          }
+        },
+        child: Column(
+          children: [
+            Expanded(
+              child: PageView(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: context.read<HomeScreenController>().pageController,
+                children: context.read<HomeScreenController>().pageList,
+              ),
             ),
-          ),
-          const MusicPlayerWidget(),
-        ],
+            const MusicPlayerWidget(),
+          ],
+        ),
       ),
       bottomNavigationBar: Consumer<HomeScreenController>(
         builder: (context, value, child) => BottomNavigationBar(
