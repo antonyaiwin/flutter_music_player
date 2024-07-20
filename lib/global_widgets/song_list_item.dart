@@ -29,11 +29,14 @@ class SongListItem extends StatelessWidget {
         id: song.id,
         type: ArtworkType.AUDIO,
         artworkBorder: BorderRadius.circular(5),
-        nullArtworkWidget: Image.asset(
-          ImageConstants.musicBg,
-          width: 50,
-          height: 50,
-          fit: BoxFit.cover,
+        nullArtworkWidget: ClipRRect(
+          borderRadius: BorderRadius.circular(5),
+          child: Image.asset(
+            ImageConstants.musicBg,
+            width: 50,
+            height: 50,
+            fit: BoxFit.cover,
+          ),
         ),
         keepOldArtwork: true,
       ),

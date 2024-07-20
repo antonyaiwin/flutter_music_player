@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_music_player/controller/add_to_playlist_bottom_sheet_controller.dart';
+import 'package:flutter_music_player/controller/create_playlist_bottom_sheet_controller.dart';
 import 'package:flutter_music_player/controller/songs_controller.dart';
-import 'package:flutter_music_player/global_widgets/add_playlist_bottom_sheet.dart';
+import 'package:flutter_music_player/global_widgets/create_playlist_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 class AddToPlaylistBottomSheetBody extends StatelessWidget {
@@ -80,7 +81,11 @@ class AddToPlaylistBottomSheetBody extends StatelessWidget {
           showModalBottomSheet(
             context: context,
             isScrollControlled: true,
-            builder: (context) => AddPlaylistBottomSheet(),
+            builder: (context) => ChangeNotifierProvider(
+              create: (BuildContext context) =>
+                  CreatePlaylistBottomSheetController(),
+              child: const CreatePlaylistBottomSheet(),
+            ),
           );
         },
         child: const Icon(Icons.add),

@@ -5,7 +5,8 @@ import 'package:flutter_music_player/global_widgets/playlist_list_item.dart';
 import 'package:flutter_music_player/view/playlist_view_screen/playlist_view_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../global_widgets/add_playlist_bottom_sheet.dart';
+import '../../../../controller/create_playlist_bottom_sheet_controller.dart';
+import '../../../../global_widgets/create_playlist_bottom_sheet.dart';
 
 class PlaylistPage extends StatelessWidget {
   const PlaylistPage({super.key});
@@ -56,7 +57,11 @@ class PlaylistPage extends StatelessWidget {
           showModalBottomSheet(
             context: context,
             isScrollControlled: true,
-            builder: (context) => AddPlaylistBottomSheet(),
+            builder: (context) => ChangeNotifierProvider(
+              create: (BuildContext context) =>
+                  CreatePlaylistBottomSheetController(),
+              child: const CreatePlaylistBottomSheet(),
+            ),
           );
         },
         child: const Icon(Icons.add),
