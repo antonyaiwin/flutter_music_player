@@ -16,6 +16,22 @@ class PlaylistPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('PlayLists'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                builder: (context) => ChangeNotifierProvider(
+                  create: (BuildContext context) =>
+                      CreatePlaylistBottomSheetController(),
+                  child: const CreatePlaylistBottomSheet(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.add),
+          ),
+        ],
       ),
       body: Consumer<SongsController>(
         builder: (context, value, child) {
@@ -51,20 +67,6 @@ class PlaylistPage extends StatelessWidget {
             itemCount: value.playlists.length,
           );
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            builder: (context) => ChangeNotifierProvider(
-              create: (BuildContext context) =>
-                  CreatePlaylistBottomSheetController(),
-              child: const CreatePlaylistBottomSheet(),
-            ),
-          );
-        },
-        child: const Icon(Icons.add),
       ),
     );
   }

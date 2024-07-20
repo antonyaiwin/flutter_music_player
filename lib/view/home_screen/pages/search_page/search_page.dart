@@ -69,9 +69,10 @@ class SearchPage extends StatelessWidget {
                     builder: (BuildContext context, SearchPageController value,
                             Widget? child) =>
                         SliverToBoxAdapter(
-                      child: value.songs.isNotEmpty
+                      child: value.songs.isNotEmpty &&
+                              value.searchTextController.text.isNotEmpty
                           ? Padding(
-                              padding: const EdgeInsets.only(top: 15),
+                              padding: const EdgeInsets.only(top: 15, left: 10),
                               child: Text(
                                 'Songs',
                                 style: Theme.of(context).textTheme.titleMedium,
@@ -92,7 +93,9 @@ class SearchPage extends StatelessWidget {
                               .onAudioTouch(index, value.songs);
                         },
                       ),
-                      itemCount: value.songs.length,
+                      itemCount: value.searchTextController.text.isEmpty
+                          ? 0
+                          : value.songs.length,
                     ),
                   ),
 
@@ -101,9 +104,10 @@ class SearchPage extends StatelessWidget {
                     builder: (BuildContext context, SearchPageController value,
                             Widget? child) =>
                         SliverToBoxAdapter(
-                      child: value.albums.isNotEmpty
+                      child: value.albums.isNotEmpty &&
+                              value.searchTextController.text.isNotEmpty
                           ? Padding(
-                              padding: const EdgeInsets.only(top: 15),
+                              padding: const EdgeInsets.only(top: 15, left: 10),
                               child: Text(
                                 'Albums',
                                 style: Theme.of(context).textTheme.titleMedium,
@@ -134,7 +138,9 @@ class SearchPage extends StatelessWidget {
                           );
                         },
                       ),
-                      itemCount: value.albums.length,
+                      itemCount: value.searchTextController.text.isEmpty
+                          ? 0
+                          : value.albums.length,
                     ),
                   ),
 
@@ -143,9 +149,10 @@ class SearchPage extends StatelessWidget {
                     builder: (BuildContext context, SearchPageController value,
                             Widget? child) =>
                         SliverToBoxAdapter(
-                      child: value.artists.isNotEmpty
+                      child: value.artists.isNotEmpty &&
+                              value.searchTextController.text.isNotEmpty
                           ? Padding(
-                              padding: const EdgeInsets.only(top: 15),
+                              padding: const EdgeInsets.only(top: 15, left: 10),
                               child: Text(
                                 'Artists',
                                 style: Theme.of(context).textTheme.titleMedium,
@@ -176,8 +183,13 @@ class SearchPage extends StatelessWidget {
                           );
                         },
                       ),
-                      itemCount: value.artists.length,
+                      itemCount: value.searchTextController.text.isEmpty
+                          ? 0
+                          : value.artists.length,
                     ),
+                  ),
+                  const SliverToBoxAdapter(
+                    child: SizedBox(height: 200),
                   ),
                 ],
               ),
