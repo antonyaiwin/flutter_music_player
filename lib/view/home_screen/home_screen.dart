@@ -44,34 +44,60 @@ class HomeScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const MusicPlayerWidget(),
-                  Consumer<HomeScreenController>(
-                    builder: (context, value, child) => BottomNavigationBar(
-                      currentIndex: provider.selectedPageIndex,
-                      backgroundColor:
-                          ColorConstants.primaryBlack.withOpacity(0.7),
-                      onTap: (value) {
-                        provider.changePage(value);
-                      },
-                      showSelectedLabels: false,
-                      showUnselectedLabels: false,
-                      items: const [
-                        BottomNavigationBarItem(
-                          icon: Icon(Iconsax.home_2_outline),
-                          activeIcon: Icon(Iconsax.home_2_bold),
-                          label: '',
+                  Stack(
+                    children: [
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                          width: double.infinity,
+                          height: kBottomNavigationBarHeight,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.transparent,
+                                ColorConstants.primaryBlack.withOpacity(0.5),
+                                ColorConstants.primaryBlack.withOpacity(0.6),
+                                ColorConstants.primaryBlack.withOpacity(0.7),
+                                ColorConstants.primaryBlack.withOpacity(0.7),
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ),
+                          ),
+                          child: const Center(),
                         ),
-                        BottomNavigationBarItem(
-                          icon: Icon(Iconsax.search_normal_1_outline),
-                          activeIcon: Icon(Iconsax.search_normal_1_bold),
-                          label: '',
+                      ),
+                      Consumer<HomeScreenController>(
+                        builder: (context, value, child) => BottomNavigationBar(
+                          currentIndex: provider.selectedPageIndex,
+                          backgroundColor: Colors.transparent,
+                          onTap: (value) {
+                            provider.changePage(value);
+                          },
+                          showSelectedLabels: false,
+                          showUnselectedLabels: false,
+                          items: const [
+                            BottomNavigationBarItem(
+                              icon: Icon(Iconsax.home_2_outline),
+                              activeIcon: Icon(Iconsax.home_2_bold),
+                              label: '',
+                            ),
+                            BottomNavigationBarItem(
+                              icon: Icon(Iconsax.search_normal_1_outline),
+                              activeIcon: Icon(Iconsax.search_normal_1_bold),
+                              label: '',
+                            ),
+                            BottomNavigationBarItem(
+                              icon: Icon(Iconsax.music_playlist_outline),
+                              activeIcon: Icon(Iconsax.music_playlist_bold),
+                              label: '',
+                            ),
+                          ],
                         ),
-                        BottomNavigationBarItem(
-                          icon: Icon(Iconsax.music_playlist_outline),
-                          activeIcon: Icon(Iconsax.music_playlist_bold),
-                          label: '',
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   )
                 ],
               ),
