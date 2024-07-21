@@ -5,6 +5,7 @@ import 'package:flutter_music_player/view/home_screen/widgets/music_player_widge
 import 'package:provider/provider.dart';
 
 import '../../controller/audio_player_controller.dart';
+import '../../utils/functions/audio_more_functions.dart';
 
 class ArtistAlbumViewScreen extends StatelessWidget {
   const ArtistAlbumViewScreen({super.key});
@@ -27,6 +28,19 @@ class ArtistAlbumViewScreen extends StatelessWidget {
                   onTap: () => context
                       .read<AudioPlayerController>()
                       .onAudioTouch(index, value.songList),
+                  trailing: PopupMenuButton(
+                    onSelected: (selectedIndex) => onPopupMenuItemClick(
+                        context: context,
+                        index: selectedIndex,
+                        song: value.songList[index]),
+                    itemBuilder: (context) => [
+                      const PopupMenuItem(value: 0, child: Text('Play next')),
+                      const PopupMenuItem(
+                          value: 1, child: Text('Add to queue')),
+                      const PopupMenuItem(
+                          value: 2, child: Text('Add to playlist')),
+                    ],
+                  ),
                 ),
                 itemCount: value.songList.length,
               ),
