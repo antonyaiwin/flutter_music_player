@@ -20,54 +20,56 @@ class MusicPlayerScreen extends StatelessWidget {
           MusicPlayerScreenController(context: context),
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        body: Stack(
-          children: [
-            Stack(
-              children: [
-                Consumer<AudioPlayerController>(
-                  builder: (BuildContext context, AudioPlayerController value,
-                          Widget? child) =>
-                      AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 800),
-                    child: QueryArtworkWidget(
-                      key: ValueKey(context
-                              .read<AudioPlayerController>()
-                              .currentSong
-                              ?.id ??
-                          -1),
-                      id: context
-                              .read<AudioPlayerController>()
-                              .currentSong
-                              ?.id ??
-                          -1,
-                      type: ArtworkType.AUDIO,
-                      artworkHeight: double.infinity,
-                      size: 1000,
-                      quality: 100,
-                      format: ArtworkFormat.PNG,
-                      artworkFit: BoxFit.cover,
-                      artworkWidth: double.infinity,
-                      artworkQuality: FilterQuality.high,
-                      nullArtworkWidget: Image.asset(ImageConstants.musicBg),
-                      keepOldArtwork: true,
+        body: ClipRect(
+          child: Stack(
+            children: [
+              Stack(
+                children: [
+                  Consumer<AudioPlayerController>(
+                    builder: (BuildContext context, AudioPlayerController value,
+                            Widget? child) =>
+                        AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 800),
+                      child: QueryArtworkWidget(
+                        key: ValueKey(context
+                                .read<AudioPlayerController>()
+                                .currentSong
+                                ?.id ??
+                            -1),
+                        id: context
+                                .read<AudioPlayerController>()
+                                .currentSong
+                                ?.id ??
+                            -1,
+                        type: ArtworkType.AUDIO,
+                        artworkHeight: double.infinity,
+                        size: 1000,
+                        quality: 100,
+                        format: ArtworkFormat.PNG,
+                        artworkFit: BoxFit.cover,
+                        artworkWidth: double.infinity,
+                        artworkQuality: FilterQuality.high,
+                        nullArtworkWidget: Image.asset(ImageConstants.musicBg),
+                        keepOldArtwork: true,
+                      ),
                     ),
                   ),
-                ),
-                BackdropFilter(
-                  filter: ImageFilter.blur(
-                    sigmaX: 5000,
-                    sigmaY: 5000,
-                    tileMode: TileMode.repeated,
+                  BackdropFilter(
+                    filter: ImageFilter.blur(
+                      sigmaX: 5000,
+                      sigmaY: 5000,
+                      tileMode: TileMode.repeated,
+                    ),
+                    child: Container(
+                      color: ColorConstants.primaryBlack.withOpacity(0.3),
+                      child: const Center(),
+                    ),
                   ),
-                  child: Container(
-                    color: ColorConstants.primaryBlack.withOpacity(0.3),
-                    child: const Center(),
-                  ),
-                ),
-              ],
-            ),
-            const MusicPlayerScreenBody()
-          ],
+                ],
+              ),
+              const MusicPlayerScreenBody()
+            ],
+          ),
         ),
       ),
     );
