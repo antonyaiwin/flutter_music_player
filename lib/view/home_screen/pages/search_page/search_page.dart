@@ -23,7 +23,7 @@ class SearchPage extends StatelessWidget {
             TextField(
               controller: provider.searchTextController,
               decoration: InputDecoration(
-                hintText: 'Search for songs, albumns and artist',
+                hintText: 'Search for songs, albums and artist',
                 suffixIcon: Consumer<SearchPageController>(
                   builder: (context, value, child) => value.isSearchQueryEmpty
                       ? const SizedBox()
@@ -35,6 +35,11 @@ class SearchPage extends StatelessWidget {
                         ),
                 ),
               ),
+              autofocus: false,
+              onTapOutside: (event) {
+                FocusManager.instance.primaryFocus?.unfocus();
+                FocusScope.of(context).unfocus();
+              },
               onChanged: (value) {
                 provider.onSearchQueryChanged(
                   context: context,
